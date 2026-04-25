@@ -68,91 +68,6 @@
 
 ---
 
-## Cara Menjalankan
-
-### Prasyarat
-- Node.js 18+
-- Akun [Supabase](https://supabase.com)
-
-### 1. Clone & Install
-
-```bash
-git clone https://github.com/username/duitrack.git
-cd duitrack
-npm install
-```
-
-### 2. Setup Environment
-
-Buat file `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-```
-
-### 3. Setup Database
-
-Jalankan SQL schema di **Supabase → SQL Editor**:
-
-```bash
-# Salin konten file db/schema.sql dan jalankan di Supabase SQL Editor
-```
-
-Tambahkan RLS policies yang dibutuhkan:
-
-```sql
--- RLS untuk registrasi user baru
-CREATE POLICY "Users can insert own record" ON users
-  FOR INSERT WITH CHECK (auth.uid() = id);
-
-CREATE POLICY "Owners can insert business" ON businesses
-  FOR INSERT WITH CHECK (owner_id = auth.uid());
-
--- RLS untuk debts, budgets, achievements
-CREATE POLICY "Users can manage debts" ON debts
-  FOR ALL USING (business_id IN (SELECT id FROM businesses WHERE owner_id = auth.uid()));
-
-CREATE POLICY "Users can manage budgets" ON budgets
-  FOR ALL USING (business_id IN (SELECT id FROM businesses WHERE owner_id = auth.uid()));
-
-CREATE POLICY "Users can read achievements" ON achievements
-  FOR ALL USING (user_id = auth.uid());
-```
-
-### 4. Konfigurasi Supabase Auth
-
-Di **Supabase → Authentication → Providers → Email**:
-- Matikan **"Confirm email"** agar user bisa langsung login tanpa verifikasi email
-
-### 5. Jalankan
-
-```bash
-npm run dev
-```
-
-Buka [http://localhost:3000](http://localhost:3000)
-
----
-
-## Seed Data Testing
-
-Untuk mengisi data contoh ke akun testing:
-
-```bash
-node seed.mjs
-```
-
-Script akan otomatis membuat:
-- 140+ transaksi (6 bulan historis)
-- 10 item inventori
-- 6 pelanggan
-- 6 hutang & piutang
-- 4 budget kategori
-
----
-
 ## Skema Database
 
 ```
@@ -166,18 +81,6 @@ budgets         → Budget per kategori
 achievements    → Badge & prestasi bisnis
 reports         → Laporan tersimpan
 ```
-
----
-
-## Screenshot
-
-| Dashboard | AI Assistant | Cashflow |
-|---|---|---|
-| Grafik pendapatan real-time | Analisis otomatis berbasis data | Prediksi 3 bulan ke depan |
-
-| Hutang/Piutang | Budgeting | Achievements |
-|---|---|---|
-| Tracking jatuh tempo | Alert melebihi budget | Skor kesehatan bisnis |
 
 ---
 
@@ -201,9 +104,6 @@ reports         → Laporan tersimpan
 
 ---
 
-## Lisensi
-
-MIT License © 2025 DuitTrack
 
 ---
 
