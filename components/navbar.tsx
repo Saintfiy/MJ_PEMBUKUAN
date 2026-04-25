@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { FiUser, FiMenu } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
 import { useUIStore } from '@/store';
 
 export function Navbar() {
+  const router = useRouter();
   const { sidebarOpen, toggleMobileSidebar } = useUIStore();
 
   return (
@@ -35,6 +37,7 @@ export function Navbar() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => router.push('/settings')}
           className="flex items-center gap-2 px-2 md:px-3 py-2 hover:bg-white/10 rounded-lg transition-smooth"
           aria-label="Profil pengguna"
         >

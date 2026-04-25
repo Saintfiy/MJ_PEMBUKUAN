@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button } from '@/components/ui';
-import { FiSave, FiUserCheck, FiLock, FiBell, FiGlobe, FiToggleLeft, FiToggleRight, FiShield } from 'react-icons/fi';
+import { FiSave, FiUserCheck, FiLock, FiBell, FiGlobe, FiToggleLeft, FiToggleRight, FiShield, FiLogOut } from 'react-icons/fi';
 import { useNotificationStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 
 const SettingsPage = () => {
-  const { user, business } = useAuth({ requireAuth: true });
+  const { user, business, logout } = useAuth({ requireAuth: true });
   const { addNotification } = useNotificationStore();
 
   const [profileData, setProfileData] = useState({ full_name: '', email: '', phone: '' });
@@ -234,6 +234,20 @@ const SettingsPage = () => {
                 </button>
               </div>
             ))}
+          </div>
+        </Card>
+        {/* Keluar */}
+        <Card className="border border-red-500/20 bg-red-500/5">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h3 className="text-lg font-bold flex items-center gap-2 text-red-400">
+                <FiLogOut /> Keluar dari Akun
+              </h3>
+              <p className="text-sm text-white/60 mt-1">Sesi Anda akan diakhiri dan harus masuk kembali untuk mengakses DuitTrack.</p>
+            </div>
+            <Button variant="secondary" className="border-red-500/30 text-red-400 hover:bg-red-500/20" onClick={logout}>
+              Keluar Sekarang
+            </Button>
           </div>
         </Card>
       </div>

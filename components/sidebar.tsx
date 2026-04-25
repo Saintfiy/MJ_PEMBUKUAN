@@ -164,7 +164,7 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <div
-        className="hidden lg:block fixed left-0 top-0 h-screen z-40 print:hidden"
+        className="hidden lg:block fixed left-0 top-0 h-[100dvh] z-40 print:hidden"
         style={{ width: sidebarOpen ? 240 : 72, transition: 'width 0.25s ease' }}
       >
         <div className="h-full bg-darker border-r border-white/10 overflow-hidden">
@@ -190,7 +190,7 @@ export function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-              className="lg:hidden fixed left-0 top-0 h-screen w-[240px] bg-darker border-r border-white/10 z-50"
+              className="lg:hidden fixed left-0 top-0 h-[100dvh] w-[240px] bg-darker border-r border-white/10 z-50 flex flex-col"
             >
               <SidebarContent mobile onClose={() => setMobileOpen(false)} />
             </motion.div>
