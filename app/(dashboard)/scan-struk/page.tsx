@@ -27,6 +27,7 @@ export default function ScanStrukPage() {
 
   const [step, setStep] = useState<'upload' | 'scanning' | 'review' | 'done'>('upload');
   const [preview, setPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [parsed, setParsed] = useState<any>(null);
   const [saving, setSaving] = useState(false);
 
@@ -35,6 +36,7 @@ export default function ScanStrukPage() {
       addNotification('Hanya file gambar yang diperbolehkan', 'error');
       return;
     }
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = e => setPreview(e.target?.result as string);
     reader.readAsDataURL(file);
@@ -55,6 +57,26 @@ export default function ScanStrukPage() {
     if (!businessId || !parsed || !user) return;
     setSaving(true);
     try {
+      let receipt_url = null;
+
+      // Upload file to Supabase Storage if exists
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${businessId}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('receipts')
+          .upload(fileName, selectedFile, { cacheControl: '3600', upsert: false });
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('receipts')
+          .getPublicUrl(fileName);
+          
+        receipt_url = publicUrl;
+      }
+
       const { error } = await supabase.from('transactions').insert({
         business_id: businessId,
         created_by: user.id,
@@ -64,6 +86,7 @@ export default function ScanStrukPage() {
         category: parsed.category,
         date: parsed.date,
         payment_method: 'cash',
+        receipt_url: receipt_url,
       });
       if (error) throw error;
       addNotification('Transaksi dari struk berhasil disimpan!', 'success');
@@ -75,7 +98,7 @@ export default function ScanStrukPage() {
     }
   };
 
-  const reset = () => { setStep('upload'); setPreview(null); setParsed(null); };
+  const reset = () => { setStep('upload'); setPreview(null); setParsed(null); setSelectedFile(null); };
 
   const steps = ['Upload', 'Analisis', 'Review', 'Selesai'];
   const stepKeys = ['upload', 'scanning', 'review', 'done'];

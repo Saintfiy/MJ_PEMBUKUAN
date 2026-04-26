@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button, Modal } from '@/components/ui';
-import { FiPlus, FiEdit2, FiTrash2, FiFilter, FiDownload, FiLoader } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiFilter, FiDownload, FiLoader, FiImage } from 'react-icons/fi';
 import { formatCurrency, formatDate, exportToCSV } from '@/utils/helpers';
 import { useNotificationStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
@@ -246,7 +246,16 @@ export default function TransactionsPage() {
                         transition={{ delay: idx * 0.03 }}
                         className="border-b border-white/5 hover:bg-white/5 transition-smooth">
                         <td className="py-3 px-4 text-sm text-white/70">{formatDate(tx.date)}</td>
-                        <td className="py-3 px-4 text-sm font-medium">{tx.description}</td>
+                        <td className="py-3 px-4 text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            {tx.description}
+                            {tx.receipt_url && (
+                              <a href={tx.receipt_url} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-smooth" title="Lihat Struk">
+                                <FiImage size={14} />
+                              </a>
+                            )}
+                          </div>
+                        </td>
                         <td className="py-3 px-4">
                           <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                             tx.type === 'income' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
@@ -280,7 +289,14 @@ export default function TransactionsPage() {
                   transition={{ delay: idx * 0.05 }} className="card">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm">{tx.description}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-sm">{tx.description}</p>
+                        {tx.receipt_url && (
+                          <a href={tx.receipt_url} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-smooth" title="Lihat Struk">
+                            <FiImage size={14} />
+                          </a>
+                        )}
+                      </div>
                       <p className="text-xs text-white/50 mt-0.5">{formatDate(tx.date)} · {tx.payment_method}</p>
                     </div>
                     <p className={`font-bold text-sm ml-3 flex-shrink-0 ${tx.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
