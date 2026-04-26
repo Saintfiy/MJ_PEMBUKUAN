@@ -147,15 +147,17 @@ export function ToastContainer() {
   const { notifications, removeNotification } = useNotificationStore();
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-      <AnimatePresence>
+    <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
+      <AnimatePresence mode="popLayout">
         {notifications.map((notif) => (
           <motion.div
+            layout
             key={notif.id}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className={`px-4 py-3 rounded-xl shadow-lg border backdrop-blur-md flex items-center gap-3 ${
+            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className={`pointer-events-auto px-4 py-3 rounded-xl shadow-lg border backdrop-blur-md flex items-center gap-3 ${
               notif.type === 'success' ? 'bg-green-500/20 border-green-500/30 text-green-100' :
               notif.type === 'error' ? 'bg-red-500/20 border-red-500/30 text-red-100' :
               notif.type === 'warning' ? 'bg-yellow-500/20 border-yellow-500/30 text-yellow-100' :
