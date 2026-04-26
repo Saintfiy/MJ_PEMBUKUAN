@@ -13,8 +13,9 @@ interface CardProps {
 export function Card({ children, className = '', hover = true, style }: CardProps) {
   return (
     <motion.div
-      whileHover={hover ? { y: -2, boxShadow: '0 16px 32px rgba(139, 92, 246, 0.15)' } : undefined}
-      className={`card ${className}`}
+      whileHover={hover ? { y: -3, scale: 1.01, boxShadow: '0 20px 40px -10px rgba(139, 92, 246, 0.2)' } : undefined}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`card relative overflow-hidden backdrop-blur-xl border border-white/10 ${className}`}
       style={style}
     >
       {children}
@@ -28,31 +29,54 @@ interface StatCardProps {
   icon: ReactNode;
   change?: number;
   trend?: 'up' | 'down';
-  compact?: string; // nilai ringkas untuk mobile
+  compact?: string;
+  color?: string; // e.g., 'primary', 'secondary', 'accent', 'green'
 }
 
-export function StatCard({ label, value, icon, change, trend, compact }: StatCardProps) {
+export function StatCard({ label, value, icon, change, trend, compact, color = 'primary' }: StatCardProps) {
+  const colorMap: Record<string, string> = {
+    primary: 'from-primary/20 to-transparent text-primary',
+    secondary: 'from-secondary/20 to-transparent text-secondary',
+    accent: 'from-accent/20 to-transparent text-accent',
+    green: 'from-green-500/20 to-transparent text-green-400',
+    red: 'from-red-500/20 to-transparent text-red-400',
+  };
+  
+  const bgGradient = colorMap[color] || colorMap.primary;
+
   return (
-    <Card>
-      <div className="flex items-start justify-between gap-2">
+    <Card hover={true} className="group cursor-default">
+      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${bgGradient} opacity-30 rounded-bl-full group-hover:opacity-60 transition-opacity duration-500`} />
+      <div className="relative z-10 flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="text-white/60 text-xs font-medium mb-1.5 truncate">{label}</p>
-          {/* Nilai ringkas di layar kecil, penuh di layar besar */}
-          {compact ? (
-            <>
-              <p className="text-xl font-bold sm:hidden">{compact}</p>
-              <p className="text-2xl font-bold hidden sm:block truncate">{value}</p>
-            </>
-          ) : (
-            <p className="text-xl sm:text-2xl font-bold truncate">{value}</p>
-          )}
+          <p className="text-white/50 text-xs font-semibold mb-1.5 uppercase tracking-wider truncate">{label}</p>
+          <motion.div
+            key={value}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-1"
+          >
+            {compact ? (
+              <>
+                <p className="text-2xl font-black sm:hidden drop-shadow-md">{compact}</p>
+                <p className="text-3xl font-black hidden sm:block truncate drop-shadow-md tracking-tight">{value}</p>
+              </>
+            ) : (
+              <p className="text-2xl sm:text-3xl font-black truncate drop-shadow-md tracking-tight">{value}</p>
+            )}
+          </motion.div>
           {change !== undefined && (
-            <p className={`text-xs mt-1.5 font-medium ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
-              {trend === 'up' ? '↑' : '↓'} {Math.abs(change)}% dari bulan lalu
+            <p className={`text-[11px] font-bold mt-2 flex items-center gap-1 ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+              <span className={`px-1.5 py-0.5 rounded-md ${trend === 'up' ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                {trend === 'up' ? '↑' : '↓'} {Math.abs(change).toFixed(1)}%
+              </span>
+              <span className="text-white/40 font-medium ml-1">vs bulan lalu</span>
             </p>
           )}
         </div>
-        <div className="text-2xl opacity-70 flex-shrink-0 mt-0.5">{icon}</div>
+        <div className={`text-3xl opacity-80 flex-shrink-0 mt-1 p-2 rounded-xl bg-white/5 ${bgGradient.split(' ')[2]}`}>
+          {icon}
+        </div>
       </div>
     </Card>
   );
