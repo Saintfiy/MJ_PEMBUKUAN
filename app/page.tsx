@@ -53,7 +53,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-6">
+      <section className="pt-40 pb-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-16 gradient-text">Fitur Unggulan</h2>
           <div className="grid md:grid-cols-3 gap-8">
