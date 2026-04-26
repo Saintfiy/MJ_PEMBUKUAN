@@ -141,7 +141,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <DashboardLayout title={`Dashboard${business ? ' — ' + business.name : ''}`}>
+    <DashboardLayout title="Dashboard">
       <div className="space-y-6">
 
         {/* ─── Welcome Header ─── */}
