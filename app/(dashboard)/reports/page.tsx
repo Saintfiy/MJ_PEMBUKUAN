@@ -109,7 +109,7 @@ export default function ReportsPage() {
         ) : (
           <>
             {/* KPI Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 print:grid-cols-2 print:gap-6 print:mb-8">
               {[
                 { label: 'Total Pendapatan', value: formatCurrency(report.income), icon: FiDollarSign, color: 'text-green-400' },
                 { label: 'Total Pengeluaran', value: formatCurrency(report.expense), icon: FiTrendingUp, color: 'text-red-400' },
