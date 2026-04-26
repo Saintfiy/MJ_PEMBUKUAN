@@ -21,7 +21,7 @@ function simulateOCR(fileName: string) {
 }
 
 export default function ScanStrukPage() {
-  const { businessId } = useAuth({ requireAuth: true });
+  const { user, businessId } = useAuth({ requireAuth: true });
   const { addNotification } = useNotificationStore();
   const router = useRouter();
 
@@ -52,11 +52,12 @@ export default function ScanStrukPage() {
   };
 
   const handleSave = async () => {
-    if (!businessId || !parsed) return;
+    if (!businessId || !parsed || !user) return;
     setSaving(true);
     try {
       const { error } = await supabase.from('transactions').insert({
         business_id: businessId,
+        created_by: user.id,
         type: 'expense',
         amount: parsed.amount,
         description: parsed.description,
