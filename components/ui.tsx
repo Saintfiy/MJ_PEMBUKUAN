@@ -47,9 +47,14 @@ export function StatCard({ label, value, icon, change, trend, compact, color = '
   return (
     <Card hover={true} className="group cursor-default">
       <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${bgGradient} opacity-30 rounded-bl-full group-hover:opacity-60 transition-opacity duration-500`} />
-      <div className="relative z-10 flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="text-white/50 text-xs font-semibold mb-1.5 uppercase tracking-wider truncate">{label}</p>
+      <div className="relative z-10">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <p className="text-white/50 text-xs font-semibold uppercase tracking-wider truncate mt-1.5">{label}</p>
+          <div className={`text-2xl opacity-80 flex-shrink-0 p-2 rounded-xl bg-white/5 ${bgGradient.split(' ')[2]}`}>
+            {icon}
+          </div>
+        </div>
+        <div className="min-w-0">
           <motion.div
             key={value}
             initial={{ opacity: 0, y: 5 }}
@@ -59,10 +64,10 @@ export function StatCard({ label, value, icon, change, trend, compact, color = '
             {compact ? (
               <>
                 <p className="text-2xl font-black sm:hidden drop-shadow-md">{compact}</p>
-                <p className="text-3xl font-black hidden sm:block truncate drop-shadow-md tracking-tight">{value}</p>
+                <p className="text-2xl xl:text-3xl font-black hidden sm:block drop-shadow-md tracking-tight">{value}</p>
               </>
             ) : (
-              <p className="text-2xl sm:text-3xl font-black truncate drop-shadow-md tracking-tight">{value}</p>
+              <p className="text-xl sm:text-2xl xl:text-3xl font-black drop-shadow-md tracking-tight">{value}</p>
             )}
           </motion.div>
           {change !== undefined && (
@@ -73,9 +78,6 @@ export function StatCard({ label, value, icon, change, trend, compact, color = '
               <span className="text-white/40 font-medium ml-1">vs bulan lalu</span>
             </p>
           )}
-        </div>
-        <div className={`text-3xl opacity-80 flex-shrink-0 mt-1 p-2 rounded-xl bg-white/5 ${bgGradient.split(' ')[2]}`}>
-          {icon}
         </div>
       </div>
     </Card>

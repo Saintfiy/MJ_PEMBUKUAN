@@ -92,7 +92,12 @@ export default function Home() {
       </div>
 
       {/* ── ALL PAGE CONTENT — pointer-events-none so cursor falls through to robot ── */}
-      <div className="relative z-10 pointer-events-none">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 3, ease: 'easeInOut' }}
+        className="relative z-10 pointer-events-none"
+      >
 
         {/* ── NAVBAR ── */}
         <motion.nav
@@ -120,18 +125,22 @@ export default function Home() {
 
         {/* ── HERO ── Full viewport, content centered ── */}
         <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
-          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="max-w-3xl mx-auto">
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-5xl md:text-7xl font-black mb-6 leading-[1.05] tracking-tight drop-shadow-2xl"
-            >
-              <span className="gradient-text">Pembukuan Pintar</span>
-              <br />
-              <span className="text-white">untuk UMKM Indonesia</span>
-            </motion.h1>
+          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-4xl mx-auto py-10 px-4">
+            {/* Soft dark glow to make text readable against the robot */}
+            <div className="absolute inset-0 bg-black/40 blur-3xl rounded-full pointer-events-none" />
+            
+            <div className="relative z-10">
+              {/* Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="text-5xl md:text-7xl font-black mb-6 leading-[1.05] tracking-tight drop-shadow-2xl"
+              >
+                <span className="gradient-text">Pembukuan Pintar</span>
+                <br />
+                <span className="text-white">untuk UMKM Indonesia</span>
+              </motion.h1>
 
             {/* Sub */}
             <motion.p
@@ -158,6 +167,7 @@ export default function Home() {
                 Login ke Akun
               </Link>
             </motion.div>
+            </div>
           </motion.div>
 
           {/* Scroll hint */}
@@ -359,7 +369,7 @@ export default function Home() {
           </div>
         </footer>
 
-      </div>
+      </motion.div>
     </div>
   );
 }
