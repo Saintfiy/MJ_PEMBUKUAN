@@ -144,81 +144,29 @@ export default function DashboardPage() {
     <DashboardLayout title={`Dashboard${business ? ' — ' + business.name : ''}`}>
       <div className="space-y-6">
 
-        {/* ─── Hero Banner with 3D Spline Robot ─── */}
+        {/* ─── Welcome Header ─── */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl border border-white/10"
-          style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.25) 0%, rgba(236,72,153,0.15) 50%, rgba(6,182,212,0.1) 100%)' }}
+          className="flex flex-wrap items-center justify-between gap-4"
         >
-          {/* Decorative blobs */}
-          <div className="absolute -top-16 -left-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-0 md:gap-4 px-6 pt-6 md:px-10 md:pt-8 pb-0">
-            {/* Left: greeting text */}
-            <div className="flex-1 pb-6 md:pb-10">
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-white/50 text-sm font-medium mb-2 uppercase tracking-widest"
-              >
-                Selamat datang kembali 👋
-              </motion.p>
-              <motion.h1
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-3xl md:text-4xl font-black mb-3 bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent"
-              >
-                {business?.name || 'Bisnis Anda'}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-white/50 text-sm max-w-sm"
-              >
-                AI Keuangan Anda siap membantu. Lihat ringkasan bisnis terbaru Anda di bawah ini.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-wrap gap-3 mt-5"
-              >
-                <Link href="/transactions">
-                  <Button variant="primary" size="sm">
-                    Tambah Transaksi <FiArrowRight size={14} />
-                  </Button>
-                </Link>
-                <Link href="/ai-assistant">
-                  <Button variant="secondary" size="sm">
-                    Tanya AI <FiBarChart2 size={14} />
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Right: 3D Spline Robot */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 150, damping: 20 }}
-              className="w-full md:w-[280px] h-[200px] md:h-[260px] flex-shrink-0 overflow-hidden rounded-2xl"
-              style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }}
-            >
-              <iframe
-                src="https://my.spline.design/nexbotrobotcharacterconcept-FNsuGhtZ8mqBi4nYmcAU0QP3/"
-                frameBorder="0"
-                width="100%"
-                height="100%"
-                title="DuitTrack AI Robot"
-                className="pointer-events-auto"
-                style={{ borderRadius: '16px' }}
-              />
-            </motion.div>
+          <div>
+            <p className="text-white/40 text-sm font-medium uppercase tracking-widest mb-1">Selamat datang kembali 👋</p>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+              {business?.name || 'Bisnis Anda'}
+            </h1>
+          </div>
+          <div className="flex gap-3">
+            <Link href="/transactions">
+              <Button variant="primary" size="sm">
+                <FiBarChart2 size={14} /> Tambah Transaksi
+              </Button>
+            </Link>
+            <Link href="/ai-assistant">
+              <Button variant="secondary" size="sm">
+                Tanya AI <FiArrowRight size={14} />
+              </Button>
+            </Link>
           </div>
         </motion.div>
 
