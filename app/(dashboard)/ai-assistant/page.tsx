@@ -13,13 +13,128 @@ type Role = 'user' | 'ai';
 interface Msg { role: Role; content: string; ts: number }
 
 const QUICK = [
-  'Bagaimana kondisi keuangan bisnis saya?',
-  'Kategori pengeluaran terbesar?',
-  'Berapa laba bersih bulan ini?',
-  'Ada item stok yang kritis?',
-  'Rekomendasikan cara hemat biaya',
-  'Analisis cashflow saya',
+  'Kondisi keuangan bisnis saya?',
+  'Pengeluaran terbesar bulan ini?',
+  'Berapa laba bersih saya?',
+  'Item stok yang hampir habis?',
+  'Tips hemat biaya operasional',
+  'Status hutang & piutang',
+  'Berapa rata-rata transaksi saya?',
+  'Prediksi cashflow bulan depan',
+  'Bagaimana cara tingkatkan profit?',
+  'Apakah bisnis saya untung?',
 ];
+
+function smartReply(msg: string, ctx: ReturnType<typeof buildContext> extends Promise<infer T> ? T : never): string {
+  const q = msg.toLowerCase();
+  const { totalRevenue, totalExpense, profit, margin, monthRevenue, monthExpense, monthProfit,
+    txCount, topCats, lowStock, inventory, overdueDebts, totalReceivable, totalPayable, budgets } = ctx;
+
+  if (txCount === 0) return '📭 Belum ada data transaksi.\n\nMulai dengan:\n• Buka menu **Transaksi** → Tambah transaksi\n• Atau gunakan **Scan Struk** untuk catat langsung dari foto\n\nSetelah ada data, saya bisa bantu analisis keuangan bisnis Anda secara detail.';
+
+  const healthScore = margin >= 25 ? 90 : margin >= 15 ? 75 : margin >= 5 ? 55 : margin >= 0 ? 35 : 15;
+  const healthLabel = healthScore >= 80 ? '🟢 Sangat Sehat' : healthScore >= 60 ? '🟡 Cukup Sehat' : healthScore >= 40 ? '🟠 Perlu Perhatian' : '🔴 Kritis';
+
+  // ---- KONDISI UMUM / OVERVIEW ----
+  if (q.match(/kondisi|kesehatan|gimana|bagaimana|sehat|overview|summary|ringkasan|status bisnis/)) {
+    const issues: string[] = [];
+    const positives: string[] = [];
+    if (margin < 10) issues.push(`Margin keuntungan rendah (${margin.toFixed(1)}%)`);
+    if (lowStock.length > 0) issues.push(`${lowStock.length} item stok hampir habis`);
+    if (overdueDebts.length > 0) issues.push(`${overdueDebts.length} tagihan jatuh tempo belum dibayar`);
+    if (totalPayable > totalReceivable) issues.push(`Hutang (${formatCurrency(totalPayable)}) melebihi piutang`);
+    if (margin >= 20) positives.push('Margin keuntungan sehat');
+    if (monthProfit > 0) positives.push('Bulan ini menguntungkan');
+    if (overdueDebts.length === 0) positives.push('Tidak ada tagihan jatuh tempo');
+
+    return `**Status Bisnis: ${healthLabel}** (Skor ${healthScore}/100)\n\n📊 Keseluruhan:\n• Pendapatan: ${formatCurrency(totalRevenue)}\n• Pengeluaran: ${formatCurrency(totalExpense)}\n• Laba Bersih: ${formatCurrency(profit)}\n• Margin: ${margin.toFixed(1)}%\n\n📅 Bulan Ini:\n• Pendapatan: ${formatCurrency(monthRevenue)}\n• Pengeluaran: ${formatCurrency(monthExpense)}\n• Laba: ${formatCurrency(monthProfit)}\n${positives.length > 0 ? '\n✅ Poin Positif:\n' + positives.map(p => '• ' + p).join('\n') : ''}${issues.length > 0 ? '\n\n⚠️ Perlu Diperhatikan:\n' + issues.map(i => '• ' + i).join('\n') : '\n\n✅ Semua indikator dalam kondisi baik!'}`;
+  }
+
+  // ---- LABA / PROFIT ----
+  if (q.match(/laba|profit|untung|keuntungan|rugi|margin/)) {
+    const trend = monthProfit > 0 ? '📈 Bulan ini profitable' : '📉 Bulan ini masih merugi';
+    const advice = margin >= 25
+      ? 'Margin sangat baik! Pertimbangkan reinvestasi ke ekspansi produk atau buka cabang baru.'
+      : margin >= 15
+      ? 'Margin sehat. Fokus pertahankan efisiensi dan cari peluang upsell ke pelanggan existing.'
+      : margin >= 5
+      ? 'Margin tipis. Review harga jual — apakah sudah mencakup semua biaya + profit yang diinginkan?'
+      : margin >= 0
+      ? 'Hampir impas. Prioritaskan potong 1-2 biaya terbesar dan pertimbangkan naikkan harga.'
+      : 'Bisnis sedang merugi. Segera identifikasi biaya terbesar dan evaluasi harga jual produk.';
+    return `**Analisis Laba Bisnis:**\n\n• Laba keseluruhan: ${formatCurrency(profit)}\n• Laba bulan ini: ${formatCurrency(monthProfit)}\n• Margin keuntungan: ${margin.toFixed(1)}%\n• ${trend}\n\n💡 **Saran:** ${advice}`;
+  }
+
+  // ---- PENGELUARAN ----
+  if (q.match(/pengeluaran|biaya|expense|terbesar|kategori|cost/)) {
+    if (topCats.length === 0) return 'Belum ada data pengeluaran tercatat. Tambahkan transaksi pengeluaran terlebih dahulu.';
+    const list = topCats.map(([cat, amt], i) => `${i + 1}. **${cat}**: ${formatCurrency(amt)} (${totalExpense > 0 ? ((amt / totalExpense) * 100).toFixed(0) : 0}%)`).join('\n');
+    const top = topCats[0];
+    const potentialSave = top[1] * 0.15;
+    return `**Top Kategori Pengeluaran:**\n\n${list}\n\n💡 **Pengeluaran terbesar: ${top[0]}** (${formatCurrency(top[1])})\nJika bisa hemat 15% saja di kategori ini, bisnis bisa simpan **${formatCurrency(potentialSave)}/periode**.\n\nCoba: negosiasi ulang kontrak vendor, bandingkan harga supplier, atau cari alternatif lebih hemat.`;
+  }
+
+  // ---- PENDAPATAN ----
+  if (q.match(/pendapatan|pemasukan|revenue|omset|omzet/)) {
+    const avgPerTx = txCount > 0 ? totalRevenue / Math.max(txCount, 1) : 0;
+    const incomeTx = txCount;
+    return `**Analisis Pendapatan:**\n\n• Total pendapatan: ${formatCurrency(totalRevenue)}\n• Bulan ini: ${formatCurrency(monthRevenue)}\n• Rata-rata per transaksi: ${formatCurrency(avgPerTx)}\n• Total transaksi: ${incomeTx}\n\n💡 **Tips Tingkatkan Pendapatan:**\n• Fokus ke pelanggan dengan nilai transaksi tinggi (lihat halaman Pelanggan)\n• Tambah produk/layanan komplementer untuk upsell\n• Aktifkan program loyalitas untuk pelanggan repeat`;
+  }
+
+  // ---- RATA-RATA TRANSAKSI ----
+  if (q.match(/rata.rata|average|per transaksi/)) {
+    const avg = txCount > 0 ? totalRevenue / txCount : 0;
+    return `**Rata-rata Transaksi:**\n\n• Rata-rata nilai: ${formatCurrency(avg)}\n• Total transaksi: ${txCount}\n• Total pendapatan: ${formatCurrency(totalRevenue)}\n\n💡 Untuk meningkatkan rata-rata transaksi, coba teknik **upselling** (tawarkan produk premium) atau **bundling** (paket produk dengan harga spesial).`;
+  }
+
+  // ---- STOK / INVENTORI ----
+  if (q.match(/stok|inventori|barang|produk|restock|kritis|habis|sediaan/)) {
+    if (inventory.length === 0) return '📦 Belum ada data inventori. Tambahkan item di menu **Inventori** untuk mulai pantau stok.';
+    if (lowStock.length === 0) return `✅ Semua ${inventory.length} item stok dalam kondisi aman. Tidak ada yang perlu segera di-restock.`;
+    const list = lowStock.slice(0, 5).map((i: any) => `• **${i.name}**: sisa ${i.quantity} unit (min. ${i.reorder_level})`).join('\n');
+    const urgentCount = lowStock.filter((i: any) => i.quantity === 0).length;
+    return `**⚠️ ${lowStock.length} Item Stok Kritis:**\n\n${list}${lowStock.length > 5 ? `\n• ...dan ${lowStock.length - 5} item lainnya` : ''}\n\n${urgentCount > 0 ? `🚨 **${urgentCount} item sudah HABIS** — bisa menyebabkan kehilangan penjualan!\n\n` : ''}💡 Buka halaman **Inventori** untuk langsung update stok atau hubungi supplier.`;
+  }
+
+  // ---- HUTANG PIUTANG ----
+  if (q.match(/hutang|piutang|tagihan|jatuh tempo|overdue|kredit|pinjam/)) {
+    const net = totalReceivable - totalPayable;
+    const overdueList = overdueDebts.slice(0, 3).map((d: any) => `• ${d.customer_name}: ${formatCurrency(d.amount)}`).join('\n');
+    return `**Ringkasan Hutang & Piutang:**\n\n💰 Piutang (akan diterima): ${formatCurrency(totalReceivable)}\n📤 Hutang (kewajiban): ${formatCurrency(totalPayable)}\n📊 Posisi bersih: ${net >= 0 ? '+' : ''}${formatCurrency(net)} ${net >= 0 ? '✅' : '⚠️'}\n⏰ Jatuh tempo: ${overdueDebts.length} item${overdueDebts.length > 0 ? '\n\n**Segera tagih:**\n' + overdueList + '\n\n💡 Hubungi debitur yang sudah jatuh tempo. Piutang yang tertunggak = modal yang tidak bekerja.' : '\n\n✅ Semua kewajiban dalam jadwal.'}`;
+  }
+
+  // ---- CASHFLOW ----
+  if (q.match(/cashflow|arus kas|likuiditas|kas|prediksi|bulan depan|forecast/)) {
+    const avgMonthlyRevenue = monthRevenue;
+    const avgMonthlyExpense = monthExpense;
+    const projectedProfit = avgMonthlyRevenue - avgMonthlyExpense;
+    const netCash = totalRevenue - totalExpense;
+    return `**Analisis Cashflow:**\n\n• Net cashflow saat ini: ${formatCurrency(netCash)} ${netCash >= 0 ? '✅' : '⚠️'}\n• Pendapatan bulan ini: ${formatCurrency(monthRevenue)}\n• Pengeluaran bulan ini: ${formatCurrency(monthExpense)}\n• Proyeksi bulan depan: ${formatCurrency(projectedProfit)} (estimasi berdasarkan tren)\n\n💰 Likuiditas:\n• Piutang bisa cairkan: ${formatCurrency(totalReceivable)}\n• Kewajiban jatuh tempo: ${formatCurrency(totalPayable)}\n\n💡 Buka halaman **Cashflow** untuk visualisasi tren 6 bulan.`;
+  }
+
+  // ---- HEMAT / REKOMENDASI / TIPS ----
+  if (q.match(/hemat|potong|efisiensi|rekomendasi|saran|tips|improve|tingkat|naik/)) {
+    const top3 = topCats.slice(0, 3).map(([c, a]) => `**${c}** (${formatCurrency(a)})`).join(', ');
+    const hasLowMargin = margin < 15;
+    return `**💡 Rekomendasi untuk Bisnis Anda:**\n\n1. **Efisiensi Pengeluaran** — Pengeluaran terbesar: ${top3 || 'belum ada data'}. Review vendor & negosiasi ulang kontrak.\n\n2. **Tagih Piutang** — Ada ${formatCurrency(totalReceivable)} yang bisa segera dicairkan untuk perkuat cashflow.\n\n3. **Pantau Budget** — Aktifkan limit budget di halaman **Budgeting** agar pengeluaran tidak kebablasan.\n\n4. **Optimasi Stok** — ${lowStock.length > 0 ? `${lowStock.length} item hampir habis, segera restock sebelum kehabisan.` : 'Stok aman, hindari overstock yang ikat modal tidak perlu.'}\n\n5. ${hasLowMargin ? '**Evaluasi Harga Jual** — Margin hanya ' + margin.toFixed(1) + '%. Pertimbangkan naikkan harga 5-10% atau kurangi diskon.' : '**Ekspansi** — Margin ' + margin.toFixed(1) + '% cukup sehat. Pertimbangkan tambah lini produk baru atau buka cabang.'}`;
+  }
+
+  // ---- PELANGGAN ----
+  if (q.match(/pelanggan|customer|klien|pembeli/)) {
+    return `**Tips Manajemen Pelanggan:**\n\n💡 Buka halaman **Pelanggan (CRM)** untuk:\n• Lihat siapa pelanggan dengan nilai transaksi terbesar\n• Pantau pelanggan yang sudah lama tidak bertransaksi\n• Catat kontak dan histori pembelian\n\n📌 Strategi retensi:\n• Hubungi pelanggan VIP secara personal\n• Buat program loyalitas atau diskon repeat order\n• Follow-up pelanggan yang belum bertransaksi >30 hari`;
+  }
+
+  // ---- BUDGET ----
+  if (q.match(/budget|anggaran|limit|batas/)) {
+    if (budgets.length === 0) return '📋 Belum ada budget yang diatur.\n\n💡 Buka halaman **Budgeting** untuk:\n• Set batas pengeluaran per kategori\n• Pantau realisasi vs anggaran\n• Dapat peringatan saat mendekati batas';
+    const budgetList = budgets.slice(0, 4).map((b: any) => `• ${b.category}: limit ${formatCurrency(b.limit_amount)} (${b.period})`).join('\n');
+    return `**Budget yang Aktif:**\n\n${budgetList}\n\n💡 Cek realisasi vs anggaran di halaman **Budgeting** untuk pastikan pengeluaran on-track.`;
+  }
+
+  // ---- FALLBACK: jawab pertanyaan bebas ----
+  const hasData = txCount > 0;
+  return `Saya asisten keuangan bisnis Anda. Berdasarkan **${txCount} transaksi** yang tercatat, ini yang bisa saya bantu:\n\n📊 **Analisis Tersedia:**\n• Kondisi & kesehatan bisnis secara keseluruhan\n• Laba, margin, dan tren keuntungan\n• Kategori pengeluaran terbesar\n• Status hutang & piutang\n• Stok inventori kritis\n• Cashflow & prediksi keuangan\n• Rekomendasi hemat biaya\n\n💬 Coba tanyakan salah satu topik di atas, atau klik pertanyaan cepat di bawah!`;
+}
 
 async function buildContext(businessId: string) {
   const now = new Date();
@@ -61,70 +176,6 @@ async function buildContext(businessId: string) {
   };
 }
 
-function smartReply(msg: string, ctx: ReturnType<typeof buildContext> extends Promise<infer T> ? T : never): string {
-  const q = msg.toLowerCase();
-  const { totalRevenue, totalExpense, profit, margin, monthRevenue, monthExpense, monthProfit, txCount, topCats, lowStock, overdueDebts, totalReceivable, totalPayable } = ctx;
-
-  if (txCount === 0) return 'Belum ada data transaksi. Tambahkan transaksi di menu **Transaksi** atau coba **Scan Struk** untuk catat pengeluaran dari foto struk belanja.';
-
-  // Kondisi / kesehatan umum
-  if (q.match(/kondisi|kesehatan|gimana|bagaimana|sehat|overview/)) {
-    const status = margin >= 25 ? '🟢 Sangat Sehat' : margin >= 10 ? '🟡 Cukup Sehat' : margin >= 0 ? '🟠 Perlu Perhatian' : '🔴 Kritis';
-    const issues = [];
-    if (margin < 10) issues.push(`margin keuntungan hanya ${margin.toFixed(1)}%`);
-    if (lowStock.length > 0) issues.push(`${lowStock.length} item stok hampir habis`);
-    if (overdueDebts.length > 0) issues.push(`${overdueDebts.length} tagihan jatuh tempo`);
-
-    return `**Status Bisnis: ${status}**\n\n📊 Ringkasan Keseluruhan:\n• Total Pendapatan: ${formatCurrency(totalRevenue)}\n• Total Pengeluaran: ${formatCurrency(totalExpense)}\n• Laba Bersih: ${formatCurrency(profit)}\n• Margin: ${margin.toFixed(1)}%\n\n📅 Bulan Ini:\n• Pendapatan: ${formatCurrency(monthRevenue)}\n• Pengeluaran: ${formatCurrency(monthExpense)}\n• Laba: ${formatCurrency(monthProfit)}${issues.length > 0 ? '\n\n⚠️ Perhatikan:\n' + issues.map(i => '• ' + i).join('\n') : '\n\nSemua indikator dalam kondisi baik! ✓'}`;
-  }
-
-  // Laba
-  if (q.match(/laba|profit|untung|keuntungan/)) {
-    const advice = margin >= 25 ? 'Pertimbangkan reinvestasi ke ekspansi atau stok produk terlaris.' : margin >= 10 ? 'Margin masih bisa ditingkatkan dengan efisiensi biaya operasional.' : margin >= 0 ? 'Prioritaskan pengurangan biaya — review pengeluaran terbesar Anda.' : 'Bisnis sedang merugi. Segera evaluasi harga jual dan potong biaya tidak esensial.';
-    return `**Analisis Laba Bisnis:**\n\n• Laba keseluruhan: ${formatCurrency(profit)}\n• Laba bulan ini: ${formatCurrency(monthProfit)}\n• Margin keuntungan: ${margin.toFixed(1)}%\n\n💡 ${advice}`;
-  }
-
-  // Pengeluaran / kategori terbesar
-  if (q.match(/pengeluaran|biaya|expense|kategori terbesar|terbesar/)) {
-    if (topCats.length === 0) return 'Belum ada data pengeluaran yang bisa dianalisis.';
-    const list = topCats.map(([cat, amt], i) => `${i + 1}. ${cat}: ${formatCurrency(amt)} (${totalExpense > 0 ? ((amt / totalExpense) * 100).toFixed(0) : 0}%)`).join('\n');
-    const top = topCats[0];
-    return `**Top Kategori Pengeluaran:**\n\n${list}\n\n💡 Pengeluaran terbesar di kategori **${top[0]}** (${formatCurrency(top[1])}). Coba negosiasikan biaya dengan vendor atau cari alternatif yang lebih hemat.`;
-  }
-
-  // Pendapatan / revenue
-  if (q.match(/pendapatan|pemasukan|revenue|omset/)) {
-    return `**Analisis Pendapatan:**\n\n• Total pendapatan: ${formatCurrency(totalRevenue)}\n• Bulan ini: ${formatCurrency(monthRevenue)}\n• Rata-rata per transaksi: ${formatCurrency(totalRevenue / Math.max(txCount, 1))}\n\n💡 Untuk meningkatkan pendapatan, fokus pada pelanggan dengan nilai transaksi tertinggi dan produk yang paling laku. Cek halaman **Pelanggan** untuk melihat siapa customer terbaik Anda.`;
-  }
-
-  // Stok / inventori
-  if (q.match(/stok|inventori|barang|produk|restock|kritis/)) {
-    if (lowStock.length === 0) return '✅ Semua stok dalam kondisi aman. Tidak ada item yang perlu segera di-restock.';
-    const list = lowStock.slice(0, 5).map(i => `• ${i.name}: sisa ${i.quantity} unit (min. ${i.reorder_level})`).join('\n');
-    return `**⚠️ ${lowStock.length} Item Stok Kritis:**\n\n${list}\n\n💡 Segera lakukan pemesanan ulang untuk mencegah kehabisan stok dan kehilangan penjualan. Buka halaman **Inventori** untuk melihat detail.`;
-  }
-
-  // Hutang piutang
-  if (q.match(/hutang|piutang|tagihan|jatuh tempo|overdue/)) {
-    const overdueList = overdueDebts.slice(0, 3).map(d => `• ${d.customer_name}: ${formatCurrency(d.amount)}`).join('\n');
-    return `**Ringkasan Hutang & Piutang:**\n\n💰 Piutang (uang masuk): ${formatCurrency(totalReceivable)}\n📤 Hutang (kewajiban): ${formatCurrency(totalPayable)}\n⚠️ Jatuh tempo: ${overdueDebts.length} item${overdueDebts.length > 0 ? '\n\n' + overdueList + '\n\n💡 Segera tagih piutang yang sudah jatuh tempo untuk menjaga cashflow.' : '\n\n✅ Tidak ada tagihan yang terlambat.'}`;
-  }
-
-  // Hemat biaya / rekomendasi
-  if (q.match(/hemat|potong|efisiensi|rekomendasi|saran|tips/)) {
-    const top3 = topCats.slice(0, 3).map(([c]) => c).join(', ');
-    return `**💡 Rekomendasi Efisiensi Biaya:**\n\n1. **Review kategori terbesar** — ${top3 || 'Analisis pengeluaran terbesar'} adalah area terbesar. Cari peluang negosiasi.\n2. **Bandingkan vendor** — Minta penawaran dari minimal 3 pemasok untuk setiap kategori besar.\n3. **Pantau budget** — Aktifkan budget limit di halaman **Budgeting** untuk kontrol otomatis.\n4. **Tagih piutang** — Ada ${formatCurrency(totalReceivable)} piutang yang bisa segera dicairkan.\n5. **Optimalkan stok** — Hindari kelebihan stok yang mengikat modal tidak perlu.`;
-  }
-
-  // Cashflow
-  if (q.match(/cashflow|arus kas|likuiditas|kas/)) {
-    const net = totalRevenue - totalExpense;
-    const status = net > 0 ? '✅ Positif' : '⚠️ Negatif';
-    return `**Analisis Cashflow:**\n\n• Status: ${status}\n• Net cashflow: ${formatCurrency(net)}\n• Piutang belum tertagih: ${formatCurrency(totalReceivable)}\n• Hutang jatuh tempo: ${formatCurrency(totalPayable)}\n\n💡 Lihat halaman **Cashflow** untuk prediksi 3 bulan ke depan berbasis tren historis Anda.`;
-  }
-
-  return `Saya bisa membantu analisis **keuangan bisnis Anda** berdasarkan ${txCount} transaksi yang tercatat. Coba tanyakan:\n\n• Kondisi keuangan bisnis saya?\n• Kategori pengeluaran terbesar?\n• Bagaimana laba bulan ini?\n• Rekomendasikan cara hemat biaya\n• Status hutang & piutang saya`;
-}
 
 export default function AIAssistantPage() {
   const { businessId, loading: authLoading } = useAuth({ requireAuth: true });
@@ -207,11 +258,13 @@ export default function AIAssistantPage() {
             <div ref={bottomRef} />
           </div>
 
-          {/* Quick questions */}
-          {msgs.length === 0 && !loadingCtx && (
-            <div className="flex flex-wrap gap-2">
+          {/* Quick questions (Always visible) */}
+          {!loadingCtx && (
+            <div className="flex overflow-x-auto pb-2 gap-2 hide-scrollbar">
               {QUICK.map(q => (
-                <button key={q} onClick={() => send(q)} className="text-xs px-3 py-2 border border-white/15 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-smooth text-left">{q}</button>
+                <button key={q} onClick={() => send(q)} className="flex-shrink-0 text-xs px-3 py-2 border border-white/15 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-smooth">
+                  {q}
+                </button>
               ))}
             </div>
           )}

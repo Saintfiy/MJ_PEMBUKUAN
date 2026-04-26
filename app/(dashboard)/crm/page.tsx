@@ -114,8 +114,8 @@ export default function CRMPage() {
     setIsEditModalOpen(true);
   };
 
-  const CustomerForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) => (
-    <form onSubmit={onSubmit} className="space-y-4">
+  const customerFormJSX = (
+    <form onSubmit={handleSave} className="space-y-4">
       <div>
         <label className="block text-sm font-medium mb-1">Nama Pelanggan / Perusahaan</label>
         <input required type="text" className="input-field" value={formData.name}
@@ -239,10 +239,10 @@ export default function CRMPage() {
       </div>
 
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Tambah Pelanggan">
-        <CustomerForm onSubmit={handleSave} />
+        {customerFormJSX}
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Pelanggan">
-        <CustomerForm onSubmit={handleSave} />
+        {customerFormJSX}
       </Modal>
     </DashboardLayout>
   );

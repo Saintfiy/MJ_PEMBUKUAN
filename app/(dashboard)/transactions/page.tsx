@@ -124,8 +124,8 @@ export default function TransactionsPage() {
   const filterLabels: Record<string, string> = { all: 'Semua', income: 'Pemasukan', expense: 'Pengeluaran' };
   const categories = formData.type === 'income' ? CATEGORIES_INCOME : CATEGORIES_EXPENSE;
 
-  const TransactionForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) => (
-    <form onSubmit={onSubmit} className="space-y-4">
+  const transactionFormJSX = (
+    <form onSubmit={handleSave} className="space-y-4">
       <div>
         <label className="block text-sm font-medium mb-1">Deskripsi</label>
         <input required type="text" className="input-field" value={formData.description}
@@ -304,10 +304,10 @@ export default function TransactionsPage() {
       </div>
 
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Tambah Transaksi">
-        <TransactionForm onSubmit={handleSave} />
+        {transactionFormJSX}
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Transaksi">
-        <TransactionForm onSubmit={handleSave} />
+        {transactionFormJSX}
       </Modal>
     </DashboardLayout>
   );

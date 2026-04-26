@@ -107,8 +107,8 @@ export default function InventoryPage() {
     setIsEditModalOpen(true);
   };
 
-  const ItemForm = ({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) => (
-    <form onSubmit={onSubmit} className="space-y-4">
+  const itemFormJSX = (
+    <form onSubmit={handleSave} className="space-y-4">
       <div>
         <label className="block text-sm font-medium mb-1">Nama Item</label>
         <input required type="text" className="input-field" value={formData.name}
@@ -258,10 +258,10 @@ export default function InventoryPage() {
       </div>
 
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Tambah Item Inventori">
-        <ItemForm onSubmit={handleSave} />
+        {itemFormJSX}
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Edit Item">
-        <ItemForm onSubmit={handleSave} />
+        {itemFormJSX}
       </Modal>
     </DashboardLayout>
   );

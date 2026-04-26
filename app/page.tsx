@@ -48,9 +48,6 @@ export default function Home() {
             >
               Mulai Gratis <FiArrowRight />
             </Link>
-            <button className="px-8 py-4 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-smooth">
-              Pelajari Lebih Lanjut
-            </button>
           </div>
         </motion.div>
       </section>
@@ -106,26 +103,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl mx-auto card text-center"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Siap mengubah bisnis Anda?</h2>
-          <p className="text-white/60 mb-8">
-            Bergabung dengan ribuan UMKM yang menggunakan DuitTrack untuk mengelola keuangan lebih baik.
-          </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-4 bg-primary text-darker rounded-lg hover:shadow-lg transition-smooth"
-          >
-            Mulai Gratis Sekarang
-          </Link>
-        </motion.div>
       </section>
 
       {/* Footer */}

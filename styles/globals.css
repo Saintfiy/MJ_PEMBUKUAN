@@ -38,25 +38,27 @@ body {
   @apply transition-all duration-200 ease-out;
 }
 
-/* === BUTTONS === */
-.btn-primary {
-  @apply px-6 py-2 rounded-xl bg-primary text-darker font-semibold hover:shadow-lg hover:shadow-primary/25 transition-smooth;
-}
+@layer components {
+  /* === BUTTONS === */
+  .btn-primary {
+    @apply px-6 py-2 rounded-xl bg-primary text-darker font-semibold hover:shadow-lg hover:shadow-primary/25 transition-smooth;
+  }
 
-.btn-secondary {
-  @apply px-6 py-2 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-smooth;
-}
+  .btn-secondary {
+    @apply px-6 py-2 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-smooth;
+  }
 
-/* === INPUT === */
-.input-field {
-  @apply w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 
-         focus:outline-none focus:border-primary/60 focus:bg-white/10 focus:ring-1 focus:ring-primary/20
-         transition-smooth text-sm;
-}
+  /* === INPUT === */
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 
+           focus:outline-none focus:border-primary/60 focus:bg-white/10 focus:ring-1 focus:ring-primary/20
+           transition-smooth text-sm;
+  }
 
-/* === CARD === */
-.card {
-  @apply p-4 md:p-6 rounded-2xl glass;
+  /* === CARD === */
+  .card {
+    @apply p-4 md:p-6 rounded-2xl glass;
+  }
 }
 
 /* === BADGE === */
@@ -101,6 +103,17 @@ body {
 }
 
 /* === PRINT === */
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
 @media print {
   body {
     background-color: white !important;

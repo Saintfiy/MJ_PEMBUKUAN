@@ -65,19 +65,17 @@ interface NotificationStore {
   removeNotification: (id: string) => void;
 }
 
-export const useNotificationStore = create<NotificationStore>((set) => ({
+export const useNotificationStore = create<NotificationStore>((set, get) => ({
   notifications: [],
-  addNotification: (message, type = 'info') =>
+  addNotification: (message, type = 'info') => {
+    const id = Date.now().toString();
     set((state) => ({
-      notifications: [
-        ...state.notifications,
-        {
-          id: Date.now().toString(),
-          type,
-          message,
-        },
-      ],
-    })),
+      notifications: [...state.notifications, { id, type, message }],
+    }));
+    setTimeout(() => {
+      get().removeNotification(id);
+    }, 4000);
+  },
   removeNotification: (id) =>
     set((state) => ({
       notifications: state.notifications.filter((n) => n.id !== id),
