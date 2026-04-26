@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button } from '@/components/ui';
-import { FiLink, FiCheckCircle, FiExternalLink, FiCode, FiCopy, FiZap, FiSettings, FiTrash2, FiPlus } from 'react-icons/fi';
+import { FiLink, FiCheckCircle, FiExternalLink, FiCode, FiCopy, FiZap, FiSettings, FiTrash2, FiPlus, FiLoader } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useNotificationStore } from '@/store';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useAuth } from '@/hooks/useAuth';
 
 const paymentMethods = [
   { id: 'qris', name: 'QRIS', desc: 'Scan QR untuk semua e-wallet & mobile banking', icon: '📱', color: 'from-blue-500/20 to-blue-600/5 border-blue-500/30', status: 'Siap Diaktifkan' },
@@ -33,8 +35,11 @@ const apiEndpoints = [
 
 export default function IntegrasiPage() {
   const { addNotification } = useNotificationStore();
+  const supabase = createClientComponentClient();
+  const { user, business } = useAuth();
   const [activePayment, setActivePayment] = useState<Set<string>>(new Set(['qris']));
   const [activeChannel, setActiveChannel] = useState<Set<string>>(new Set());
+  const [isSyncing, setIsSyncing] = useState<string | null>(null);
 
   const togglePayment = (id: string) => {
     const p = paymentMethods.find(p => p.id === id);
@@ -47,13 +52,75 @@ export default function IntegrasiPage() {
     });
   };
 
+  const simulateSync = async (channelName: string) => {
+    if (!user || !business) return;
+    setIsSyncing(channelName);
+    
+    try {
+      // 1. Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // 2. Insert 2 Mock Customers
+      const mockCustomers = [
+        { business_id: business.id, name: `Pelanggan ${channelName} 1`, phone: '08123456789' },
+        { business_id: business.id, name: `Pelanggan ${channelName} 2`, phone: '08129876543' }
+      ];
+      
+      const { data: insertedCustomers, error: custErr } = await supabase
+        .from('customers')
+        .insert(mockCustomers)
+        .select('id');
+        
+      if (custErr) throw custErr;
+      
+      // 3. Insert 5 Mock Transactions
+      const amounts = [150000, 250000, 75000, 320000, 110000];
+      const mockTx = amounts.map(amt => ({
+        business_id: business.id,
+        created_by: user.id,
+        type: 'income',
+        category: 'Penjualan Online',
+        amount: amt,
+        description: `Pesanan dari ${channelName}`,
+        date: new Date().toISOString(),
+        payment_method: channelName
+      }));
+      
+      const { error: txErr } = await supabase
+        .from('transactions')
+        .insert(mockTx);
+        
+      if (txErr) throw txErr;
+
+      // Update UI state
+      setActiveChannel(prev => {
+        const next = new Set(prev);
+        next.add(channelName);
+        return next;
+      });
+      
+      addNotification(`${channelName} berhasil terhubung! 5 transaksi & 2 pelanggan baru disinkronisasi ✓`, 'success');
+    } catch (err: any) {
+      console.error('Sync error:', err);
+      addNotification(`Gagal sinkronisasi dengan ${channelName}`, 'error');
+    } finally {
+      setIsSyncing(null);
+    }
+  };
+
   const toggleChannel = (name: string) => {
-    setActiveChannel(prev => {
-      const next = new Set(prev);
-      if (next.has(name)) next.delete(name); else next.add(name);
-      addNotification(next.has(name) ? `${name} berhasil terhubung ✓` : `${name} terputus`, next.has(name) ? 'success' : 'info');
-      return next;
-    });
+    if (activeChannel.has(name)) {
+      // Disconnect
+      setActiveChannel(prev => {
+        const next = new Set(prev);
+        next.delete(name);
+        return next;
+      });
+      addNotification(`${name} terputus`, 'info');
+    } else {
+      // Connect & Sync
+      simulateSync(name);
+    }
   };
 
   const copyApiKey = () => {
@@ -139,9 +206,16 @@ export default function IntegrasiPage() {
                       <motion.button 
                         whileTap={{ scale: 0.95 }}
                         onClick={() => toggleChannel(ch.name)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-smooth flex-shrink-0 ml-2 ${isConnected ? 'bg-secondary/20 text-secondary hover:bg-secondary/30' : 'bg-primary text-darker hover:shadow-lg hover:shadow-primary/20'}`}
+                        disabled={isSyncing === ch.name}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-smooth flex-shrink-0 ml-2 disabled:opacity-70 disabled:cursor-wait ${isConnected ? 'bg-secondary/20 text-secondary hover:bg-secondary/30' : 'bg-primary text-darker hover:shadow-lg hover:shadow-primary/20'}`}
                       >
-                        {isConnected ? <span className="flex items-center gap-1.5"><FiCheckCircle size={14} /> Terhubung</span> : 'Hubungkan'}
+                        {isSyncing === ch.name ? (
+                          <span className="flex items-center gap-1.5"><FiLoader className="animate-spin" size={14} /> Sinkronisasi...</span>
+                        ) : isConnected ? (
+                          <span className="flex items-center gap-1.5"><FiCheckCircle size={14} /> Terhubung</span>
+                        ) : (
+                          'Hubungkan'
+                        )}
                       </motion.button>
                     </div>
                   </Card>
