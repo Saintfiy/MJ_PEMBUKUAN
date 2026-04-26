@@ -187,25 +187,63 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* ── STATS STRIP ── */}
+        {/* ── WHY DUITTRACK ── */}
         <section
-          className="border-y border-white/10 py-14 px-6"
-          style={{ background: 'rgba(9,9,11,0.7)', backdropFilter: 'blur(20px)' }}
+          className="border-y border-white/10 py-20 px-6"
+          style={{ background: 'rgba(9,9,11,0.72)', backdropFilter: 'blur(24px)' }}
         >
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
-          >
-            {stats.map((s, i) => (
-              <motion.div key={i} variants={itemVariants}>
-                <div className="text-3xl md:text-4xl font-black gradient-text mb-1">{s.value}</div>
-                <div className="text-sm text-white/50 font-medium">{s.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-14"
+            >
+              <p className="text-secondary text-sm font-bold uppercase tracking-widest mb-3">Mengapa DuitTrack?</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                Bukan sekadar aplikasi catatan keuangan
+              </h2>
+            </motion.div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              className="grid md:grid-cols-3 gap-8"
+            >
+              {[
+                {
+                  emoji: '🤖',
+                  title: 'AI yang Benar-benar Bekerja',
+                  desc: 'Asisten AI DuitTrack bukan chatbot biasa. Ia membaca data transaksi Anda, mendeteksi pola pengeluaran, dan memberi rekomendasi nyata — bukan saran generik.',
+                },
+                {
+                  emoji: '⚡',
+                  title: 'Satu Platform, Semua Kebutuhan',
+                  desc: 'Dari pembukuan harian, laporan keuangan, manajemen inventori, CRM pelanggan, hingga integrasi marketplace — semua ada di satu tempat. Tidak perlu berpindah-pindah aplikasi.',
+                },
+                {
+                  emoji: '🔒',
+                  title: 'Keamanan Tingkat Enterprise',
+                  desc: 'Data Anda dilindungi dengan enkripsi penuh, Row-Level Security Supabase, dan autentikasi aman. Hanya Anda yang bisa mengakses data bisnis Anda sendiri.',
+                },
+              ].map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className="p-6 rounded-2xl border border-white/10 backdrop-blur-xl"
+                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  whileHover={{ y: -4, borderColor: 'rgba(139,92,246,0.4)' }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <div className="text-4xl mb-4">{item.emoji}</div>
+                  <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
+                  <p className="text-white/55 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </section>
 
         {/* ── FEATURES ── */}
@@ -253,28 +291,68 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── CTA BOTTOM ── */}
-        <section className="py-28 px-6" style={{ background: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(20px)' }}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto relative overflow-hidden rounded-3xl p-12 text-center border border-primary/20"
-            style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.25) 0%, rgba(236,72,153,0.12) 100%)', backdropFilter: 'blur(20px)' }}
-          >
-            <div className="absolute -top-16 -left-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
-                Siap kelola bisnis<br /><span className="gradient-text">lebih cerdas?</span>
+        {/* ── COMPARISON: DUITTRACK vs KONVENSIONAL ── */}
+        <section className="py-20 px-6" style={{ background: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(20px)' }}>
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <p className="text-accent text-sm font-bold uppercase tracking-widest mb-3">Perbandingan</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                DuitTrack vs Cara Lama
               </h2>
-              <p className="text-white/60 text-lg mb-8">Gratis selamanya untuk fitur dasar. Upgrade kapan saja.</p>
-              <Link href="/register" className="group inline-flex items-center gap-2 px-10 py-4 bg-primary text-darker font-black rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95">
-                Mulai Gratis — Daftar Sekarang
-                <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-6"
+            >
+              {/* Old Way */}
+              <div className="p-7 rounded-2xl border border-red-500/20" style={{ background: 'rgba(239,68,68,0.05)' }}>
+                <p className="text-red-400 font-bold text-sm uppercase tracking-widest mb-5">❌ Cara Konvensional</p>
+                <ul className="space-y-3 text-white/60 text-sm">
+                  {[
+                    'Catat manual di buku / Excel setiap hari',
+                    'Rekap laporan mingguan yang memakan waktu berjam-jam',
+                    'Tidak tahu kondisi keuangan bisnis secara real-time',
+                    'Struk dan nota sering hilang atau rusak',
+                    'Data pelanggan tersebar di banyak tempat',
+                    'Tidak ada peringatan jika keuangan mulai bermasalah',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <span className="text-red-400 mt-0.5 flex-shrink-0">✗</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* DuitTrack */}
+              <div className="p-7 rounded-2xl border border-primary/30" style={{ background: 'rgba(139,92,246,0.08)' }}>
+                <p className="text-primary font-bold text-sm uppercase tracking-widest mb-5">✅ Dengan DuitTrack</p>
+                <ul className="space-y-3 text-white/70 text-sm">
+                  {[
+                    'Catat transaksi dalam hitungan detik, atau scan struk otomatis',
+                    'Laporan keuangan & grafik tersedia real-time tanpa effort',
+                    'Dashboard live — tahu kondisi bisnis kapanpun, dimanapun',
+                    'Semua struk tersimpan digital & aman di cloud',
+                    'CRM terpusat: semua data pelanggan dalam satu tempat',
+                    'AI aktif memantau dan memberi peringatan dini otomatis',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </div>
         </section>
 
         {/* ── FOOTER ── */}
