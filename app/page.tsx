@@ -74,7 +74,8 @@ export default function Home() {
     <div className="min-h-screen bg-darker overflow-x-hidden">
 
       {/* ── SPLINE ROBOT — FIXED FULL-SCREEN BACKGROUND ── */}
-      <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
+      {/* NO pointer-events-none here — so the robot can track cursor movement */}
+      <div className="fixed inset-0 z-0 w-full h-full">
         <iframe
           src="https://my.spline.design/nexbotrobotcharacterconcept-FNsuGhtZ8mqBi4nYmcAU0QP3/"
           frameBorder="0"
@@ -83,22 +84,22 @@ export default function Home() {
           title="DuitTrack AI Robot Background"
           className="w-full h-full"
         />
-        {/* Dark overlay so text stays readable */}
+        {/* Overlay is pointer-events-none so it doesn't block cursor to the iframe below */}
         <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(9,9,11,0.45) 0%, rgba(9,9,11,0.3) 40%, rgba(9,9,11,0.7) 100%)' }}
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, rgba(9,9,11,0.3) 0%, rgba(9,9,11,0.1) 40%, rgba(9,9,11,0.4) 100%)' }}
         />
       </div>
 
-      {/* ── ALL PAGE CONTENT sits on top of the robot ── */}
-      <div className="relative z-10">
+      {/* ── ALL PAGE CONTENT — pointer-events-none so cursor falls through to robot ── */}
+      <div className="relative z-10 pointer-events-none">
 
         {/* ── NAVBAR ── */}
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="fixed top-0 w-full z-50 px-6 py-4"
+          className="fixed top-0 w-full z-50 px-6 py-4 pointer-events-auto"
           style={{ backdropFilter: 'blur(24px)', background: 'rgba(9,9,11,0.6)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
         >
           <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -149,11 +150,11 @@ export default function Home() {
               transition={{ delay: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link href="/register" className="group inline-flex items-center gap-2 px-8 py-4 bg-primary text-darker font-bold rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95">
+              <Link href="/register" className="pointer-events-auto group inline-flex items-center gap-2 px-8 py-4 bg-primary text-darker font-bold rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95">
                 Mulai Gratis Sekarang
                 <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/login" className="inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl text-lg border border-white/20 text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
+              <Link href="/login" className="pointer-events-auto inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl text-lg border border-white/20 text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
                 Login ke Akun
               </Link>
             </motion.div>
@@ -179,7 +180,7 @@ export default function Home() {
         {/* ── WHY DUITTRACK ── */}
         <section
           className="border-y border-white/10 py-20 px-6"
-          style={{ background: 'rgba(9,9,11,0.72)', backdropFilter: 'blur(24px)' }}
+          style={{ background: 'rgba(9,9,11,0.45)', backdropFilter: 'blur(16px)' }}
         >
           <div className="max-w-5xl mx-auto">
             <motion.div
@@ -236,7 +237,7 @@ export default function Home() {
         </section>
 
         {/* ── FEATURES ── */}
-        <section className="py-28 px-6" style={{ background: 'rgba(9,9,11,0.75)', backdropFilter: 'blur(20px)' }}>
+        <section className="py-28 px-6" style={{ background: 'rgba(9,9,11,0.4)', backdropFilter: 'blur(12px)' }}>
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -281,7 +282,7 @@ export default function Home() {
         </section>
 
         {/* ── COMPARISON: DUITTRACK vs KONVENSIONAL ── */}
-        <section className="py-20 px-6" style={{ background: 'rgba(9,9,11,0.8)', backdropFilter: 'blur(20px)' }}>
+        <section className="py-20 px-6" style={{ background: 'rgba(9,9,11,0.45)', backdropFilter: 'blur(12px)' }}>
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -345,15 +346,15 @@ export default function Home() {
         </section>
 
         {/* ── FOOTER ── */}
-        <footer className="border-t border-white/10 py-10 px-6" style={{ background: 'rgba(9,9,11,0.85)', backdropFilter: 'blur(20px)' }}>
+        <footer className="border-t border-white/10 py-10 px-6" style={{ background: 'rgba(9,9,11,0.55)', backdropFilter: 'blur(16px)' }}>
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-xl font-black">
               <span className="gradient-text">Duit</span><span className="text-white">Track</span>
             </div>
             <p className="text-white/30 text-sm">© {new Date().getFullYear()} DuitTrack. Hak cipta dilindungi undang-undang.</p>
             <div className="flex items-center gap-6 text-sm text-white/40">
-              <Link href="/login" className="hover:text-white transition-colors">Masuk</Link>
-              <Link href="/register" className="hover:text-white transition-colors">Daftar</Link>
+              <Link href="/login" className="pointer-events-auto hover:text-white transition-colors">Masuk</Link>
+              <Link href="/register" className="pointer-events-auto hover:text-white transition-colors">Daftar</Link>
             </div>
           </div>
         </footer>
