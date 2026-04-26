@@ -75,14 +75,13 @@ export default function Home() {
 
       {/* ── SPLINE ROBOT — FIXED FULL-SCREEN BACKGROUND ── */}
       {/* NO pointer-events-none here — so the robot can track cursor movement */}
-      <div className="fixed inset-0 z-0 w-full h-full">
+      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
         <iframe
           src="https://my.spline.design/nexbotrobotcharacterconcept-FNsuGhtZ8mqBi4nYmcAU0QP3/"
           frameBorder="0"
           width="100%"
-          height="100%"
           title="DuitTrack AI Robot Background"
-          className="w-full h-full"
+          className="w-full h-[calc(100%+70px)] pointer-events-auto"
         />
         {/* Overlay is pointer-events-none so it doesn't block cursor to the iframe below */}
         <div
