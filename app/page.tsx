@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import {
   FiArrowRight, FiTrendingUp, FiCpu, FiShield,
-  FiZap, FiBarChart2, FiUsers, FiStar
+  FiZap, FiBarChart2, FiUsers
 } from 'react-icons/fi';
 
 const features = [
@@ -120,17 +120,6 @@ export default function Home() {
         {/* ── HERO ── Full viewport, content centered ── */}
         <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="max-w-3xl mx-auto">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-primary/40 bg-primary/15 text-primary text-sm font-semibold backdrop-blur-md"
-            >
-              <FiStar size={12} />
-              Platform Keuangan UMKM #1 Indonesia
-            </motion.div>
-
             {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
