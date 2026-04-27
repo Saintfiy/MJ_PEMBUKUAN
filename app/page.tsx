@@ -136,7 +136,7 @@ export default function Home() {
                 transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="text-5xl md:text-7xl font-black mb-6 leading-[1.05] tracking-tight drop-shadow-2xl"
               >
-                <span className="gradient-text">Pembukuan Pintar</span>
+                <span className="gradient-text">Pembukuan Affan</span>
                 <br />
                 <span className="text-white">untuk UMKM Indonesia</span>
               </motion.h1>
