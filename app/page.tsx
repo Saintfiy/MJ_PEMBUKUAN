@@ -127,7 +127,7 @@ export default function Home() {
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-4xl mx-auto py-10 px-4">
             {/* Soft dark glow to make text readable against the robot */}
             <div className="absolute inset-0 bg-black/40 blur-3xl rounded-full pointer-events-none" />
-            
+
             <div className="relative z-10">
               {/* Headline */}
               <motion.h1
@@ -136,36 +136,36 @@ export default function Home() {
                 transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="text-5xl md:text-7xl font-black mb-6 leading-[1.05] tracking-tight drop-shadow-2xl"
               >
-                <span className="gradient-text">Pembukuan Affan</span>
+                <span className="gradient-text">Pembukuan Pintar</span>
                 <br />
                 <span className="text-white">untuk UMKM Indonesia</span>
               </motion.h1>
 
-            {/* Sub */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.65, duration: 0.7 }}
-              className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto drop-shadow-lg"
-            >
-              AI + Analitik + OCR dalam satu platform. Kelola keuangan bisnis Anda seperti CEO kelas dunia — tanpa kerumitan.
-            </motion.p>
+              {/* Sub */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.65, duration: 0.7 }}
+                className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto drop-shadow-lg"
+              >
+                AI + Analitik + OCR dalam satu platform. Kelola keuangan bisnis Anda seperti CEO kelas dunia — tanpa kerumitan.
+              </motion.p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Link href="/register" className="pointer-events-auto group inline-flex items-center gap-2 px-8 py-4 bg-primary text-darker font-bold rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95">
-                Mulai Gratis Sekarang
-                <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="/login" className="pointer-events-auto inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl text-lg border border-white/20 text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
-                Login ke Akun
-              </Link>
-            </motion.div>
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+              >
+                <Link href="/register" className="pointer-events-auto group inline-flex items-center gap-2 px-8 py-4 bg-primary text-darker font-bold rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95">
+                  Mulai Gratis Sekarang
+                  <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link href="/login" className="pointer-events-auto inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl text-lg border border-white/20 text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
+                  Login ke Akun
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
 
