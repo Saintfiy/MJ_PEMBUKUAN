@@ -62,7 +62,7 @@ export const PrismaHero = () => {
                 className="font-black leading-[0.85] tracking-tight text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[12vw] xl:text-[11vw]"
                 style={{ color: "#E1E0CC" }}
               >
-                <WordsPullUp text="JUJUPLENGER" showAsterisk />
+                <WordsPullUp text="DuitTrack" showAsterisk />
               </h1>
             </div>
 
