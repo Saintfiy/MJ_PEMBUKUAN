@@ -130,7 +130,7 @@ export default function Home() {
                 </div>
               </div>
               <span className="text-xl font-bold tracking-tight text-white flex items-center">
-                Duit<span className="text-white/50 font-normal">Track</span>
+                JUJU<span className="text-white/50 font-normal">PLENGER</span>
               </span>
             </div>
 
