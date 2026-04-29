@@ -9,6 +9,7 @@ interface Feature {
   icon: React.ReactNode;
   color: string; // Used for text highlight
   baseColor: string; // Used for glows, e.g. "bg-violet-500"
+  preview?: React.ReactNode; // Custom preview UI
 }
 
 interface FeatureShowcaseProps {
@@ -96,22 +97,30 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps) {
                 className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-96 md:h-96 blur-[100px] rounded-full ${features[activeIndex].baseColor} opacity-20`}
               />
               
-              {/* Central Floating Icon Wrapper */}
-              <motion.div 
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="relative z-10 w-24 h-24 md:w-56 md:h-56 rounded-full flex items-center justify-center"
-              >
-                {/* Glowing Aura */}
-                <div className={`absolute inset-0 rounded-full blur-[30px] md:blur-[40px] opacity-40 ${features[activeIndex].baseColor}`} />
-                
-                {/* Glassmorphism Icon Frame */}
-                <div className="absolute inset-1 md:inset-2 bg-gradient-to-br from-white/10 to-transparent border border-white/20 rounded-full flex items-center justify-center backdrop-blur-md shadow-[inset_0_2px_20px_rgba(255,255,255,0.1)]">
-                   <div className="text-4xl md:text-[6rem] text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.6)] transition-all duration-500">
-                     {features[activeIndex].icon}
-                   </div>
+              {features[activeIndex].preview ? (
+                <div className="relative z-10 w-full h-full p-4 md:p-8 flex items-center justify-center">
+                  {features[activeIndex].preview}
                 </div>
-              </motion.div>
+              ) : (
+                <>
+                  {/* Central Floating Icon Wrapper */}
+                  <motion.div 
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative z-10 w-24 h-24 md:w-56 md:h-56 rounded-full flex items-center justify-center"
+                  >
+                    {/* Glowing Aura */}
+                    <div className={`absolute inset-0 rounded-full blur-[30px] md:blur-[40px] opacity-40 ${features[activeIndex].baseColor}`} />
+                    
+                    {/* Glassmorphism Icon Frame */}
+                    <div className="absolute inset-1 md:inset-2 bg-gradient-to-br from-white/10 to-transparent border border-white/20 rounded-full flex items-center justify-center backdrop-blur-md shadow-[inset_0_2px_20px_rgba(255,255,255,0.1)]">
+                       <div className="text-4xl md:text-[6rem] text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.6)] transition-all duration-500">
+                         {features[activeIndex].icon}
+                       </div>
+                    </div>
+                  </motion.div>
+                </>
+              )}
               
             </motion.div>
           </AnimatePresence>

@@ -5,13 +5,218 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import {
   FiArrowRight, FiTrendingUp, FiCpu, FiShield,
-  FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiStar
+  FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiStar, FiSend, FiFileText, FiLock, FiGlobe, FiPieChart, FiImage
 } from 'react-icons/fi';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import { PrismaHero } from '@/components/ui/prisma-hero';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { FeatureShowcase } from '@/components/ui/feature-showcase';
 import Image from 'next/image';
+
+const AIAssistantPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 flex flex-col p-6 shadow-2xl relative overflow-hidden group">
+    <div className="flex flex-col items-center justify-center flex-grow text-center space-y-4 pt-10">
+      <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-2 shadow-inner">
+        <FiCpu size={32} />
+      </div>
+      <h3 className="text-xl font-bold text-white tracking-tight">Asisten Keuangan AI</h3>
+      <p className="text-white/40 text-sm max-w-xs">Tanyakan apa saja tentang keuangan Anda</p>
+    </div>
+    <div className="mt-auto space-y-5">
+      <div className="flex gap-2 overflow-hidden opacity-60">
+        {["Kondisi keuangan?", "Pengeluaran bulan ini?", "Laba bersih?"].map((chip, i) => (
+          <div key={i} className="whitespace-nowrap px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] text-white/80">
+            {chip}
+          </div>
+        ))}
+      </div>
+      <div className="relative">
+        <div className="w-full h-11 rounded-xl bg-[#1c1c1f] border border-white/10 px-4 flex items-center">
+          <span className="text-white/20 text-xs italic">Tanya tentang keuangan Anda...</span>
+        </div>
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white">
+          <FiSend size={12} />
+        </div>
+      </div>
+    </div>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-violet-500/10 blur-[80px] pointer-events-none" />
+  </div>
+);
+
+const AnalyticsPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden">
+    <div className="flex justify-between items-start mb-6">
+      <div className="space-y-1">
+        <h3 className="text-lg font-bold text-white">Arus Kas & Prediksi</h3>
+        <p className="text-white/30 text-[10px]">6 bulan aktual + 3 bulan prediksi</p>
+      </div>
+      <div className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-white/50">
+        AI Prediksi
+      </div>
+    </div>
+    
+    <div className="flex-grow relative mt-4">
+      {/* Grid Lines */}
+      <div className="absolute inset-0 flex flex-col justify-between opacity-10">
+        {[1,2,3,4].map(i => <div key={i} className="w-full h-px bg-white border-t border-dashed" />)}
+      </div>
+      
+      {/* Mock Chart Lines */}
+      <svg className="w-full h-full relative z-10" viewBox="0 0 400 150">
+        <defs>
+          <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {/* Purple Line */}
+        <path d="M0,100 Q50,60 100,110 T200,50 T300,60 T400,30" fill="transparent" stroke="#8b5cf6" strokeWidth="3" />
+        <path d="M0,100 Q50,60 100,110 T200,50 T300,60 T400,30 L400,150 L0,150 Z" fill="url(#chartGradient)" />
+        {/* Pink Line */}
+        <path d="M0,120 Q50,115 100,130 T200,115 T300,120 T400,118" fill="transparent" stroke="#ec4899" strokeWidth="2" />
+        
+        {/* Marker */}
+        <line x1="250" y1="0" x2="250" y2="150" stroke="white" strokeOpacity="0.2" strokeDasharray="4 4" />
+        <text x="230" y="80" fill="white" fillOpacity="0.4" fontSize="10">Sekarang</text>
+      </svg>
+    </div>
+    
+    <div className="flex justify-between text-[10px] text-white/20 mt-2 font-mono uppercase tracking-tighter">
+      <span>Nov</span><span>Jan</span><span>Mar</span><span>Mei (est)</span><span>Jul (est)</span>
+    </div>
+  </div>
+);
+
+const OCRPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden">
+    <div className="flex items-center justify-between mb-8">
+      <h3 className="text-xl font-bold text-white">Scan Struk — Smart OCR</h3>
+      <div className="flex gap-4 opacity-40">
+        {[1,2,3,4].map(n => <div key={n} className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold">{n}</div>)}
+      </div>
+    </div>
+    
+    <div className="flex-grow flex flex-col items-center justify-center border-2 border-dashed border-white/10 rounded-2xl bg-white/[0.02] space-y-4">
+      <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20">
+        <FiImage size={32} />
+      </div>
+      <div className="text-center">
+        <p className="text-white font-bold">Upload Foto Struk</p>
+        <p className="text-white/30 text-xs">Drag & drop atau klik untuk pilih foto</p>
+      </div>
+    </div>
+    
+    <div className="mt-6 p-4 rounded-xl bg-white/[0.03] border border-white/10">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-amber-400">💡</span>
+        <p className="text-white/60 text-[10px] font-bold uppercase tracking-wider">Tips untuk hasil terbaik:</p>
+      </div>
+      <div className="space-y-1 ml-6">
+        <div className="h-1.5 w-full bg-white/5 rounded-full" />
+        <div className="h-1.5 w-3/4 bg-white/5 rounded-full" />
+      </div>
+    </div>
+  </div>
+);
+
+const SecurityPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 p-8 flex flex-col shadow-2xl relative overflow-hidden">
+    <div className="flex items-center gap-3 mb-10">
+      <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+        <FiShield size={22} />
+      </div>
+      <h3 className="text-xl font-bold text-white">Keamanan</h3>
+    </div>
+    
+    <div className="space-y-6">
+      <div className="space-y-3">
+        <label className="text-xs font-bold text-white/40 uppercase tracking-widest">Kata Sandi Baru</label>
+        <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/10 px-4 flex items-center">
+          <div className="w-24 h-2 bg-white/10 rounded-full" />
+        </div>
+        <p className="text-[10px] text-white/20">Min. 6 karakter</p>
+      </div>
+      
+      <div className="space-y-3">
+        <label className="text-xs font-bold text-white/40 uppercase tracking-widest">Konfirmasi Kata Sandi</label>
+        <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/10 px-4 flex items-center" />
+      </div>
+      
+      <div className="pt-4">
+        <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-bold shadow-lg">
+          <FiLock size={14} />
+          Ubah Kata Sandi
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const IntegrationsPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 p-6 flex flex-col gap-4 shadow-2xl relative overflow-hidden">
+    <div className="mb-4">
+      <h3 className="text-xl font-bold text-white">Integrasi Marketplace</h3>
+      <p className="text-white/30 text-xs">Hubungkan semua channel penjualan Anda</p>
+    </div>
+    
+    <div className="space-y-3 overflow-hidden">
+      {[
+        { name: 'QRIS', color: 'bg-indigo-500', icon: <FiGlobe /> },
+        { name: 'GoPay', color: 'bg-emerald-500', icon: <FiPieChart /> },
+        { name: 'OVO', color: 'bg-purple-500', icon: <FiZap /> }
+      ].map((item, i) => (
+        <div key={i} className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between group transition-all hover:bg-white/[0.06]">
+          <div className="flex items-center gap-4">
+            <div className={`w-10 h-10 rounded-xl ${item.color}/20 flex items-center justify-center text-white shadow-lg`}>
+              {item.icon}
+            </div>
+            <div>
+              <p className="text-sm font-black text-white">{item.name}</p>
+              <p className="text-[10px] text-white/30">Terhubung secara otomatis</p>
+            </div>
+          </div>
+          <div className="w-12 h-6 rounded-full bg-white/10 p-1 flex justify-end">
+            <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const CRMPreview = () => (
+  <div className="w-full max-w-lg aspect-[1.4/1] rounded-3xl bg-[#121214] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden">
+    <div className="mb-6 flex justify-between items-center">
+      <div>
+        <h3 className="text-xl font-bold text-white">CRM Pelanggan</h3>
+        <p className="text-white/30 text-xs">Daftar transaksi pelanggan aktif</p>
+      </div>
+      <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
+        <FiUsers size={20} />
+      </div>
+    </div>
+    
+    <div className="space-y-3">
+      {[
+        { name: 'Keperluan kantor', amount: '-Rp175.000', tag: 'Perlengkapan', color: 'bg-red-500' },
+        { name: 'Gaji karyawan', amount: '-Rp690.000', tag: 'Operasional', color: 'bg-red-500' },
+        { name: 'Penjualan ritel', amount: '+Rp3.066.403', tag: 'Penjualan', color: 'bg-emerald-500' }
+      ].map((item, i) => (
+        <div key={i} className="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+          <div className="space-y-1">
+            <p className="text-sm font-bold text-white">{item.name}</p>
+            <div className={`inline-block px-2 py-0.5 rounded-full ${item.color}/10 text-[9px] font-bold text-white/80 border border-white/5`}>
+              {item.tag}
+            </div>
+          </div>
+          <p className={`text-sm font-black ${item.amount.startsWith('+') ? 'text-emerald-400' : 'text-red-400'}`}>
+            {item.amount}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const features = [
   {
@@ -20,6 +225,7 @@ const features = [
     baseColor: 'bg-violet-500',
     title: 'Asisten Keuangan AI',
     description: 'Dapatkan rekomendasi cerdas dan wawasan tentang arus kas Anda secara instan.',
+    preview: <AIAssistantPreview />
   },
   {
     icon: <FiBarChart2 size={26} />,
@@ -27,6 +233,7 @@ const features = [
     baseColor: 'bg-pink-500',
     title: 'Analitik Real-time',
     description: 'Dashboard interaktif dengan grafik premium dan prediksi berbasis data.',
+    preview: <AnalyticsPreview />
   },
   {
     icon: <FiZap size={26} />,
@@ -34,6 +241,7 @@ const features = [
     baseColor: 'bg-cyan-500',
     title: 'Scan Struk (OCR)',
     description: 'Ambil foto struk, AI langsung ekstrak dan catat transaksi otomatis.',
+    preview: <OCRPreview />
   },
   {
     icon: <FiShield size={26} />,
@@ -41,6 +249,7 @@ const features = [
     baseColor: 'bg-green-500',
     title: 'Aman & Privat',
     description: 'Keamanan tingkat bank dengan enkripsi penuh dan Row-Level Security.',
+    preview: <SecurityPreview />
   },
   {
     icon: <FiUsers size={26} />,
@@ -48,6 +257,7 @@ const features = [
     baseColor: 'bg-amber-500',
     title: 'CRM Pelanggan',
     description: 'Pantau pelanggan terbaik, riwayat pembelian, dan pola transaksi.',
+    preview: <CRMPreview />
   },
   {
     icon: <FiTrendingUp size={26} />,
@@ -55,6 +265,7 @@ const features = [
     baseColor: 'bg-indigo-500',
     title: 'Integrasi Marketplace',
     description: 'Sinkronisasi otomatis dengan Tokopedia, Shopee, dan TikTok Shop.',
+    preview: <IntegrationsPreview />
   },
 ];
 
