@@ -7,41 +7,52 @@ import {
   FiArrowRight, FiTrendingUp, FiCpu, FiShield,
   FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiStar
 } from 'react-icons/fi';
+import { ContainerScroll } from '@/components/ui/container-scroll-animation';
+import { PrismaHero } from '@/components/ui/prisma-hero';
+import { SpotlightCard } from '@/components/ui/spotlight-card';
+import { FeatureShowcase } from '@/components/ui/feature-showcase';
+import Image from 'next/image';
 
 const features = [
   {
     icon: <FiCpu size={26} />,
     color: 'from-violet-500/30 to-violet-500/0 text-violet-400 border-violet-500/20',
+    baseColor: 'bg-violet-500',
     title: 'Asisten Keuangan AI',
     description: 'Dapatkan rekomendasi cerdas dan wawasan tentang arus kas Anda secara instan.',
   },
   {
     icon: <FiBarChart2 size={26} />,
     color: 'from-pink-500/30 to-pink-500/0 text-pink-400 border-pink-500/20',
+    baseColor: 'bg-pink-500',
     title: 'Analitik Real-time',
     description: 'Dashboard interaktif dengan grafik premium dan prediksi berbasis data.',
   },
   {
     icon: <FiZap size={26} />,
     color: 'from-cyan-500/30 to-cyan-500/0 text-cyan-400 border-cyan-500/20',
+    baseColor: 'bg-cyan-500',
     title: 'Scan Struk (OCR)',
     description: 'Ambil foto struk, AI langsung ekstrak dan catat transaksi otomatis.',
   },
   {
     icon: <FiShield size={26} />,
     color: 'from-green-500/30 to-green-500/0 text-green-400 border-green-500/20',
+    baseColor: 'bg-green-500',
     title: 'Aman & Privat',
     description: 'Keamanan tingkat bank dengan enkripsi penuh dan Row-Level Security.',
   },
   {
     icon: <FiUsers size={26} />,
     color: 'from-amber-500/30 to-amber-500/0 text-amber-400 border-amber-500/20',
+    baseColor: 'bg-amber-500',
     title: 'CRM Pelanggan',
     description: 'Pantau pelanggan terbaik, riwayat pembelian, dan pola transaksi.',
   },
   {
     icon: <FiTrendingUp size={26} />,
-    color: 'from-violet-500/30 to-violet-500/0 text-violet-400 border-violet-500/20',
+    color: 'from-indigo-500/30 to-indigo-500/0 text-indigo-400 border-indigo-500/20',
+    baseColor: 'bg-indigo-500',
     title: 'Integrasi Marketplace',
     description: 'Sinkronisasi otomatis dengan Tokopedia, Shopee, dan TikTok Shop.',
   },
@@ -65,10 +76,6 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <div className="min-h-screen bg-darker overflow-x-hidden">
@@ -98,109 +105,127 @@ export default function Home() {
         className="relative z-10 pointer-events-none"
       >
 
-        {/* ── NAVBAR ── */}
-        <motion.nav
-          initial={{ y: -20, opacity: 0 }}
+        {/* ── PREMIUM FLOATING NAVBAR ── */}
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="fixed top-0 w-full z-50 px-6 py-4 pointer-events-auto"
-          style={{ backdropFilter: 'blur(24px)', background: 'rgba(9,9,11,0.6)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed top-6 left-0 right-0 z-50 flex justify-center w-full pointer-events-auto px-4"
         >
-          <div className="max-w-6xl mx-auto flex items-center justify-between">
-            <div className="text-2xl font-black tracking-tight">
-              <span className="gradient-text">Duit</span>
-              <span className="text-white">Track</span>
+          <nav 
+            className="flex items-center justify-between w-full max-w-5xl px-5 py-3 rounded-full"
+            style={{ 
+              background: 'rgba(15, 15, 18, 0.4)', 
+              backdropFilter: 'blur(24px)', 
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+            }}
+          >
+            {/* Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-indigo-400 p-[1px] shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+                <div className="w-full h-full bg-darker rounded-full flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                </div>
+              </div>
+              <span className="text-xl font-bold tracking-tight text-white flex items-center">
+                Duit<span className="text-white/50 font-normal">Track</span>
+              </span>
             </div>
+
+            {/* Centered Nav Links (Hidden on small screens) */}
+            <div className="hidden md:flex items-center gap-8 px-4">
+              <Link href="#dashboard" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
+                Dashboard
+              </Link>
+              <Link href="#keunggulan" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
+                Keunggulan
+              </Link>
+              <Link href="#fitur" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
+                Fitur
+              </Link>
+            </div>
+
+            {/* Actions */}
             <div className="flex items-center gap-3">
-              <Link href="/login" className="text-white/70 hover:text-white text-sm font-medium transition-colors px-3 py-1.5">
+              <Link href="/login" className="hidden sm:flex items-center justify-center px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors">
                 Masuk
               </Link>
-              <Link href="/register" className="inline-flex items-center gap-2 text-sm font-bold px-5 py-2 rounded-xl bg-primary text-darker hover:brightness-110 transition-all shadow-lg shadow-primary/30">
-                Daftar Gratis <FiArrowRight size={14} />
+              <Link href="/register" className="group relative inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
+                {/* Button Background & Border Glow */}
+                <div className="absolute inset-0 bg-primary/20 rounded-full" />
+                <div className="absolute inset-0 border border-primary/50 rounded-full" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                
+                <span className="relative z-10 flex items-center gap-2 text-primary group-hover:text-white transition-colors">
+                  Daftar Gratis <FiArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
               </Link>
             </div>
-          </div>
-        </motion.nav>
+          </nav>
+        </motion.div>
 
-        {/* ── HERO ── Full viewport, content centered ── */}
-        <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center pt-20">
-          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-4xl mx-auto py-10 px-4">
-            {/* Soft dark glow to make text readable against the robot */}
-            <div className="absolute inset-0 bg-black/40 blur-3xl rounded-full pointer-events-none" />
+        {/* ── PRISMA HERO ── */}
+        <PrismaHero />
 
-            <div className="relative z-10">
-              {/* Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="text-5xl md:text-7xl font-black mb-6 leading-[1.05] tracking-tight drop-shadow-2xl"
-              >
-                <span className="gradient-text">Pembukuan Pintar</span>
-                <br />
-                <span className="text-white">untuk UMKM Indonesia</span>
-              </motion.h1>
-
-              {/* Sub */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65, duration: 0.7 }}
-                className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto drop-shadow-lg"
-              >
-                AI + Analitik + OCR dalam satu platform. Kelola keuangan bisnis Anda seperti CEO kelas dunia — tanpa kerumitan.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
-                <Link href="/register" className="pointer-events-auto group inline-flex items-center gap-2 px-8 py-4 bg-primary text-darker font-bold rounded-2xl text-lg hover:brightness-110 transition-all shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95">
-                  Mulai Gratis Sekarang
-                  <FiArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <Link href="/login" className="pointer-events-auto inline-flex items-center gap-2 px-8 py-4 font-semibold rounded-2xl text-lg border border-white/20 text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
-                  Login ke Akun
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Scroll hint */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-5 h-8 rounded-full border-2 border-white/30 flex items-start justify-center pt-1.5"
+        {/* ── SMOOTH CONTENT WRAPPER ── */}
+        <div className="relative w-full z-20">
+          {/* Fading blur mask so the robot transitions smoothly into the content */}
+          <div 
+            className="absolute inset-0 bg-[#09090b]/50 backdrop-blur-2xl pointer-events-none" 
+            style={{ 
+              maskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)', 
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)' 
+            }} 
+          />
+          
+          <div className="relative z-10">
+            {/* ── SCROLL ANIMATION SHOWCASE ── */}
+            <section id="dashboard" className="relative w-full pointer-events-auto pt-10">
+          <div className="flex flex-col overflow-hidden">
+            <ContainerScroll
+              titleComponent={
+                <>
+                  <h1 className="text-3xl md:text-5xl font-semibold text-white mb-4">
+                    Lihat Bagaimana DuitTrack <br />
+                    <span className="text-4xl md:text-[5rem] font-bold mt-2 leading-none gradient-text drop-shadow-lg block">
+                      Mengubah Bisnis Anda
+                    </span>
+                  </h1>
+                </>
+              }
             >
-              <div className="w-1 h-1.5 bg-white/50 rounded-full" />
-            </motion.div>
-          </motion.div>
+              <Image
+                src="/dashboard-preview.png"
+                alt="DuitTrack Dashboard Preview"
+                height={720}
+                width={1400}
+                className="mx-auto rounded-2xl object-cover h-full object-left-top"
+                draggable={false}
+              />
+            </ContainerScroll>
+          </div>
         </section>
 
-        {/* ── WHY DUITTRACK ── */}
+        {/* ── WHY DUITTRACK (BENTO GRID) ── */}
         <section
-          className="border-y border-white/10 py-20 px-6"
-          style={{ background: 'rgba(9,9,11,0.45)', backdropFilter: 'blur(16px)' }}
+          id="keunggulan"
+          className="py-24 px-6 relative overflow-hidden pointer-events-auto"
         >
-          <div className="max-w-5xl mx-auto">
+          {/* Subtle background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+
+          <div className="max-w-5xl mx-auto relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-14"
+              className="text-center mb-16"
             >
-              <p className="text-secondary text-sm font-bold uppercase tracking-widest mb-3">Mengapa DuitTrack?</p>
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-                Bukan sekadar aplikasi catatan keuangan
+              <p className="text-primary text-sm font-bold uppercase tracking-widest mb-3">Mengapa DuitTrack?</p>
+              <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+                Standar baru pembukuan
               </h2>
             </motion.div>
 
@@ -209,45 +234,60 @@ export default function Home() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid md:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-3 gap-6"
             >
-              {[
-                {
-                  icon: <FiCpu />,
-                  title: 'AI yang Benar-benar Bekerja',
-                  desc: 'Asisten AI DuitTrack bukan chatbot biasa. Ia membaca data transaksi Anda, mendeteksi pola pengeluaran, dan memberi rekomendasi nyata — bukan saran generik.',
-                },
-                {
-                  icon: <FiZap />,
-                  title: 'Satu Platform, Semua Kebutuhan',
-                  desc: 'Dari pembukuan harian, laporan keuangan, manajemen inventori, CRM pelanggan, hingga integrasi marketplace — semua ada di satu tempat. Tidak perlu berpindah-pindah aplikasi.',
-                },
-                {
-                  icon: <FiShield />,
-                  title: 'Keamanan Tingkat Enterprise',
-                  desc: 'Data Anda dilindungi dengan enkripsi penuh, Row-Level Security Supabase, dan autentikasi aman. Hanya Anda yang bisa mengakses data bisnis Anda sendiri.',
-                },
-              ].map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  variants={itemVariants}
-                  className="p-6 rounded-2xl border border-white/10 backdrop-blur-xl"
-                  style={{ background: 'rgba(255,255,255,0.04)' }}
-                  whileHover={{ y: -4, borderColor: 'rgba(139,92,246,0.4)' }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                >
-                  <div className="text-4xl mb-4 text-primary">{item.icon}</div>
-                  <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
-                  <p className="text-white/55 text-sm leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
+              {/* Feature 1 - Large Bento Box */}
+              <motion.div variants={itemVariants} className="md:col-span-2 relative overflow-hidden rounded-3xl p-8 md:p-12 border border-white/10 bg-darker/60 backdrop-blur-xl group cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-colors duration-500" />
+                
+                <div className="relative z-10 flex flex-col h-full justify-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+                    <FiCpu size={32} className="text-white" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">AI yang Memahami <br className="hidden md:block" /> Konteks Bisnis Anda</h3>
+                  <p className="text-white/60 text-base md:text-lg max-w-md leading-relaxed">
+                    Bukan sekadar chatbot biasa. Asisten AI kami membaca riwayat transaksi Anda, mendeteksi kebocoran pengeluaran, dan memberi rekomendasi proaktif selayaknya konsultan keuangan kelas dunia.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Feature 2 - Small Bento Box */}
+              <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl p-8 border border-white/10 bg-darker/60 backdrop-blur-xl group cursor-default">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-[50px] rounded-full transition-all duration-700 group-hover:scale-150" />
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-cyan-400 group-hover:bg-cyan-500/20 transition-colors">
+                    <FiZap size={24} />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 mt-auto">Sistem Terintegrasi</h3>
+                  <p className="text-white/50 text-sm leading-relaxed">
+                    Pembukuan, inventori, hingga CRM dalam satu layar. Tidak perlu lagi berpindah aplikasi untuk mengelola operasional.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Feature 3 - Wide Bento Box */}
+              <motion.div variants={itemVariants} className="md:col-span-3 relative overflow-hidden rounded-3xl p-8 md:p-10 border border-white/10 bg-darker/60 backdrop-blur-xl group cursor-default flex flex-col md:flex-row items-start md:items-center gap-8">
+                <div className="absolute bottom-0 left-1/4 w-64 h-32 bg-green-500/10 blur-[60px] rounded-full transition-all duration-700 group-hover:scale-150" />
+                <div className="relative z-10 flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-green-400 group-hover:bg-green-500/20 transition-colors shadow-lg">
+                    <FiShield size={32} />
+                  </div>
+                </div>
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-bold text-white mb-3">Keamanan Kelas Enterprise</h3>
+                  <p className="text-white/60 text-base max-w-2xl leading-relaxed">
+                    Data Anda dilindungi dengan enkripsi berlapis, Row-Level Security dari Supabase, dan autentikasi yang aman. Kami memastikan bahwa privasi bisnis Anda 100% terlindungi dari akses pihak ketiga.
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* ── FEATURES ── */}
-        <section className="py-28 px-6" style={{ background: 'rgba(9,9,11,0.4)', backdropFilter: 'blur(12px)' }}>
-          <div className="max-w-6xl mx-auto">
+        {/* ── FEATURES (INTERACTIVE SHOWCASE) ── */}
+        <section id="fitur" className="py-28 px-6 relative overflow-hidden pointer-events-auto">
+          <div className="w-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -257,38 +297,17 @@ export default function Home() {
               <p className="text-primary text-sm font-bold uppercase tracking-widest mb-3">Fitur Unggulan</p>
               <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
                 Semua yang kamu butuhkan,<br />
-                <span className="gradient-text">dalam satu tempat</span>
+                <span className="gradient-text">dalam satu platform</span>
               </h2>
-              <p className="text-white/50 text-lg max-w-xl mx-auto">Dirancang khusus untuk pelaku UMKM Indonesia yang ingin tumbuh lebih cepat.</p>
+              <p className="text-white/50 text-lg max-w-xl mx-auto">Dirancang khusus untuk pelaku UMKM Indonesia yang ingin bekerja seefisien perusahaan multinasional.</p>
             </motion.div>
 
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-80px' }}
-              className="grid md:grid-cols-3 gap-5"
-            >
-              {features.map((f, idx) => (
-                <motion.div
-                  key={idx}
-                  variants={itemVariants}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className={`relative overflow-hidden rounded-2xl border p-6 cursor-default backdrop-blur-xl ${f.color.split(' ')[3] || 'border-white/10'}`}
-                  style={{ background: 'rgba(15,15,20,0.6)' }}
-                >
-                  <div className={`absolute top-0 right-0 w-28 h-28 bg-gradient-to-bl ${f.color.split(' ').slice(0, 2).join(' ')} opacity-40 rounded-bl-full pointer-events-none`} />
-                  <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-white/5 ${f.color.split(' ')[2]}`}>
-                    {f.icon}
-                  </div>
-                  <h3 className="relative z-10 text-lg font-bold mb-2 text-white">{f.title}</h3>
-                  <p className="relative z-10 text-white/50 text-sm leading-relaxed">{f.description}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+            <FeatureShowcase features={features} />
           </div>
         </section>
+
+          </div>
+        </div>
 
         {/* ── COMPARISON: DUITTRACK vs KONVENSIONAL ── */}
         <section className="py-20 px-6" style={{ background: 'rgba(9,9,11,0.45)', backdropFilter: 'blur(12px)' }}>
