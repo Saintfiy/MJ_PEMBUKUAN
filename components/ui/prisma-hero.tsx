@@ -46,15 +46,15 @@ export const WordsPullUp = ({ text, className = "", showAsterisk = false, style 
 export const PrismaHero = () => {
   return (
     <section className="h-screen w-full relative pt-20 pointer-events-none">
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full flex flex-col justify-end">
         
         {/* We remove the background video and noise overlay so the Spline robot stays visible behind it */}
         
-        {/* Smooth gradient overlay for text readability at the bottom, no solid colors that cause hard cuts */}
-        <div className="absolute inset-x-0 bottom-0 h-[50vh] bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-10" />
+        {/* Smooth gradient overlay for text readability at the bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10" />
 
         {/* Hero content */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-10 sm:px-6 md:px-10 z-20">
+        <div className="relative w-full px-4 pb-12 sm:pb-20 sm:px-6 md:px-10 z-20">
           <div className="grid grid-cols-12 items-end gap-4 max-w-7xl mx-auto">
             
             <div className="col-span-12 lg:col-span-8">

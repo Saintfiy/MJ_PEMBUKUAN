@@ -169,20 +169,8 @@ export default function Home() {
         {/* ── PRISMA HERO ── */}
         <PrismaHero />
 
-        {/* ── SMOOTH CONTENT WRAPPER ── */}
-        <div className="relative w-full z-20">
-          {/* Fading blur mask so the robot transitions smoothly into the content */}
-          <div 
-            className="absolute inset-0 bg-[#09090b]/50 backdrop-blur-2xl pointer-events-none" 
-            style={{ 
-              maskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)', 
-              WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 150px, black calc(100% - 150px), transparent)' 
-            }} 
-          />
-          
-          <div className="relative z-10">
-            {/* ── SCROLL ANIMATION SHOWCASE ── */}
-            <section id="dashboard" className="relative w-full pointer-events-auto pt-10">
+        {/* ── SCROLL ANIMATION SHOWCASE ── */}
+        <section id="dashboard" className="relative w-full pointer-events-auto z-20 pt-10" style={{ background: 'rgba(9,9,11,0.2)' }}>
           <div className="flex flex-col overflow-hidden">
             <ContainerScroll
               titleComponent={
@@ -211,7 +199,8 @@ export default function Home() {
         {/* ── WHY DUITTRACK (BENTO GRID) ── */}
         <section
           id="keunggulan"
-          className="py-24 px-6 relative overflow-hidden pointer-events-auto"
+          className="py-24 px-6 relative overflow-hidden pointer-events-auto border-t border-white/5"
+          style={{ background: 'rgba(9,9,11,0.6)', backdropFilter: 'blur(20px)' }}
         >
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
@@ -286,7 +275,7 @@ export default function Home() {
         </section>
 
         {/* ── FEATURES (INTERACTIVE SHOWCASE) ── */}
-        <section id="fitur" className="py-28 px-6 relative overflow-hidden pointer-events-auto">
+        <section id="fitur" className="py-28 px-6 relative overflow-hidden pointer-events-auto border-t border-white/5" style={{ background: 'rgba(9,9,11,0.3)', backdropFilter: 'blur(12px)' }}>
           <div className="w-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -305,9 +294,6 @@ export default function Home() {
             <FeatureShowcase features={features} />
           </div>
         </section>
-
-          </div>
-        </div>
 
         {/* ── COMPARISON: DUITTRACK vs KONVENSIONAL ── */}
         <section className="py-20 px-6" style={{ background: 'rgba(9,9,11,0.45)', backdropFilter: 'blur(12px)' }}>
