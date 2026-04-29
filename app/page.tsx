@@ -54,13 +54,13 @@ const AnalyticsPreview = () => (
         AI Prediksi
       </div>
     </div>
-    
+
     <div className="flex-grow relative mt-4">
       {/* Grid Lines */}
       <div className="absolute inset-0 flex flex-col justify-between opacity-10">
-        {[1,2,3,4].map(i => <div key={i} className="w-full h-px bg-white border-t border-dashed" />)}
+        {[1, 2, 3, 4].map(i => <div key={i} className="w-full h-px bg-white border-t border-dashed" />)}
       </div>
-      
+
       {/* Mock Chart Lines */}
       <svg className="w-full h-full relative z-10" viewBox="0 0 400 150">
         <defs>
@@ -74,13 +74,13 @@ const AnalyticsPreview = () => (
         <path d="M0,100 Q50,60 100,110 T200,50 T300,60 T400,30 L400,150 L0,150 Z" fill="url(#chartGradient)" />
         {/* Pink Line */}
         <path d="M0,120 Q50,115 100,130 T200,115 T300,120 T400,118" fill="transparent" stroke="#ec4899" strokeWidth="2" />
-        
+
         {/* Marker */}
         <line x1="250" y1="0" x2="250" y2="150" stroke="white" strokeOpacity="0.2" strokeDasharray="4 4" />
         <text x="230" y="80" fill="white" fillOpacity="0.4" fontSize="10">Sekarang</text>
       </svg>
     </div>
-    
+
     <div className="flex justify-between text-[10px] text-white/20 mt-2 font-mono uppercase tracking-tighter">
       <span>Nov</span><span>Jan</span><span>Mar</span><span>Mei (est)</span><span>Jul (est)</span>
     </div>
@@ -92,10 +92,10 @@ const OCRPreview = () => (
     <div className="flex items-center justify-between mb-8">
       <h3 className="text-xl font-bold text-white">Scan Struk — Smart OCR</h3>
       <div className="flex gap-4 opacity-40">
-        {[1,2,3,4].map(n => <div key={n} className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold">{n}</div>)}
+        {[1, 2, 3, 4].map(n => <div key={n} className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold">{n}</div>)}
       </div>
     </div>
-    
+
     <div className="flex-grow flex flex-col items-center justify-center border-2 border-dashed border-white/10 rounded-2xl bg-white/[0.02] space-y-4">
       <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20">
         <FiImage size={32} />
@@ -105,7 +105,7 @@ const OCRPreview = () => (
         <p className="text-white/30 text-xs">Drag & drop atau klik untuk pilih foto</p>
       </div>
     </div>
-    
+
     <div className="mt-6 p-4 rounded-xl bg-white/[0.03] border border-white/10">
       <div className="flex items-center gap-2 mb-2">
         <span className="text-amber-400">💡</span>
@@ -127,7 +127,7 @@ const SecurityPreview = () => (
       </div>
       <h3 className="text-xl font-bold text-white">Keamanan</h3>
     </div>
-    
+
     <div className="space-y-6">
       <div className="space-y-3">
         <label className="text-xs font-bold text-white/40 uppercase tracking-widest">Kata Sandi Baru</label>
@@ -136,12 +136,12 @@ const SecurityPreview = () => (
         </div>
         <p className="text-[10px] text-white/20">Min. 6 karakter</p>
       </div>
-      
+
       <div className="space-y-3">
         <label className="text-xs font-bold text-white/40 uppercase tracking-widest">Konfirmasi Kata Sandi</label>
         <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/10 px-4 flex items-center" />
       </div>
-      
+
       <div className="pt-4">
         <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-bold shadow-lg">
           <FiLock size={14} />
@@ -158,7 +158,7 @@ const IntegrationsPreview = () => (
       <h3 className="text-xl font-bold text-white">Integrasi Marketplace</h3>
       <p className="text-white/30 text-xs">Hubungkan semua channel penjualan Anda</p>
     </div>
-    
+
     <div className="space-y-3 overflow-hidden">
       {[
         { name: 'QRIS', color: 'bg-indigo-500', icon: <FiGlobe /> },
@@ -195,7 +195,7 @@ const CRMPreview = () => (
         <FiUsers size={20} />
       </div>
     </div>
-    
+
     <div className="space-y-3">
       {[
         { name: 'Keperluan kantor', amount: '-Rp175.000', tag: 'Perlengkapan', color: 'bg-red-500' },
@@ -323,11 +323,11 @@ export default function Home() {
           transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="fixed top-6 left-0 right-0 z-50 flex justify-center w-full pointer-events-auto px-4"
         >
-          <nav 
-            className="flex items-center justify-between w-full max-w-5xl px-5 py-3 rounded-full"
-            style={{ 
-              background: 'rgba(15, 15, 18, 0.4)', 
-              backdropFilter: 'blur(24px)', 
+          <nav
+            className="relative flex items-center justify-between w-full max-w-5xl px-5 py-3 rounded-full"
+            style={{
+              background: 'rgba(15, 15, 18, 0.4)',
+              backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
               border: '1px solid rgba(255, 255, 255, 0.06)',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
@@ -346,7 +346,7 @@ export default function Home() {
             </div>
 
             {/* Centered Nav Links (Hidden on small screens) */}
-            <div className="hidden md:flex items-center gap-8 px-4">
+            <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 px-4">
               <Link href="#dashboard" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
                 Dashboard
               </Link>
@@ -368,7 +368,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-primary/20 rounded-full" />
                 <div className="absolute inset-0 border border-primary/50 rounded-full" />
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                
+
                 <span className="relative z-10 flex items-center gap-2 text-primary group-hover:text-white transition-colors">
                   Daftar Gratis <FiArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                 </span>
@@ -440,7 +440,7 @@ export default function Home() {
               <motion.div variants={itemVariants} className="md:col-span-2 relative overflow-hidden rounded-3xl p-8 md:p-12 border border-white/10 bg-darker/60 backdrop-blur-xl group cursor-default">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
                 <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-colors duration-500" />
-                
+
                 <div className="relative z-10 flex flex-col h-full justify-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(139,92,246,0.3)]">
                     <FiCpu size={32} className="text-white" />
