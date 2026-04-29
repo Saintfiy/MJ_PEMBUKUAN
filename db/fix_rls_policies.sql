@@ -119,3 +119,36 @@ CREATE POLICY "Users can delete budgets" ON budgets
     business_id = get_my_business_id()
     OR business_id IN (SELECT id FROM businesses WHERE owner_id = auth.uid())
   );
+
+-- ---- ACHIEVEMENTS ----
+DROP POLICY IF EXISTS "Users can read own achievements" ON achievements;
+CREATE POLICY "Users can read own achievements" ON achievements
+  FOR SELECT USING (user_id = auth.uid());
+
+DROP POLICY IF EXISTS "Users can insert own achievements" ON achievements;
+CREATE POLICY "Users can insert own achievements" ON achievements
+  FOR INSERT WITH CHECK (user_id = auth.uid());
+
+DROP POLICY IF EXISTS "Users can delete own achievements" ON achievements;
+CREATE POLICY "Users can delete own achievements" ON achievements
+  FOR DELETE USING (user_id = auth.uid());
+
+-- ---- STORAGE: LOGOS (avatar foto profil) ----
+DROP POLICY IF EXISTS "Users can update logos" ON storage.objects;
+CREATE POLICY "Users can update logos" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'logos' AND auth.uid() IS NOT NULL);
+
+DROP POLICY IF EXISTS "Users can delete logos" ON storage.objects;
+CREATE POLICY "Users can delete logos" ON storage.objects
+  FOR DELETE USING (bucket_id = 'logos' AND auth.uid() IS NOT NULL);
+
+-- ---- SETTINGS FIXES ----
+-- 1. Tambah kolom untuk simpan preferensi notifikasi
+ALTER TABLE users ADD COLUMN IF NOT EXISTS notification_preferences JSONB DEFAULT '[true, true, false]';
+
+-- 2. Fix RLS agar pengguna bisa update pengaturan bisnis
+DROP POLICY IF EXISTS "Owners can update business" ON businesses;
+CREATE POLICY "Owners can update business" ON businesses
+  FOR UPDATE USING (owner_id = auth.uid() OR id = get_my_business_id());
+
+

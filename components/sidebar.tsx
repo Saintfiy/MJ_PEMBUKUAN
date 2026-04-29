@@ -135,8 +135,16 @@ function SidebarContent({ mobile = false, onClose }: { mobile?: boolean; onClose
       <div className="border-t border-white/10 p-2 flex-shrink-0 space-y-1">
         {expanded && user && (
           <div className="flex items-center gap-2 px-3 py-2">
-            <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-              <FiUser size={13} className="text-primary" />
+            <div className="w-7 h-7 rounded-full overflow-hidden border border-white/20 bg-primary/20 flex items-center justify-center flex-shrink-0">
+              {(user as any).avatar_url ? (
+                <img src={(user as any).avatar_url} alt="avatar" className="w-full h-full object-cover" />
+              ) : user.full_name ? (
+                <span className="text-[10px] font-bold text-primary">
+                  {user.full_name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+                </span>
+              ) : (
+                <FiUser size={13} className="text-primary" />
+              )}
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold truncate">{user.full_name || user.email}</p>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button, StatCard, Modal } from '@/components/ui';
-import { FiPlus, FiEdit2, FiTrash2, FiAlertTriangle, FiCheckCircle, FiClock } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiAlertTriangle, FiCheckCircle, FiClock, FiDollarSign, FiArrowDownCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { formatCurrency, formatDate } from '@/utils/helpers';
 import { useNotificationStore } from '@/store';
@@ -98,9 +98,9 @@ export default function HutangPiutangPage() {
     <DashboardLayout title="Hutang & Piutang">
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatCard label="Total Piutang" value={formatCurrency(totalReceivable)} icon="💰" />
-          <StatCard label="Total Hutang" value={formatCurrency(totalPayable)} icon="📤" />
-          <StatCard label="Jatuh Tempo" value={`${overdue} item`} icon="⚠️" />
+          <StatCard label="Total Piutang" value={formatCurrency(totalReceivable)} icon={<FiDollarSign />} />
+          <StatCard label="Total Hutang" value={formatCurrency(totalPayable)} icon={<FiArrowDownCircle />} />
+          <StatCard label="Jatuh Tempo" value={`${overdue} item`} icon={<FiAlertTriangle />} />
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">

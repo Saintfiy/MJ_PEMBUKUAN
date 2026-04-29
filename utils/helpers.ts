@@ -1,25 +1,57 @@
 import { format, parseISO } from 'date-fns';
 import { id as idID } from 'date-fns/locale';
 
-export const formatCurrency = (amount: number, currency = 'IDR') => {
-  return new Intl.NumberFormat('id-ID', {
+export const formatCurrency = (amount: number, currencyOverride?: string) => {
+  let currency = currencyOverride;
+  if (!currency && typeof window !== 'undefined') {
+    currency = localStorage.getItem('business_currency') || 'IDR';
+  }
+  currency = currency || 'IDR';
+
+  let locale = 'id-ID';
+  let fraction = 0;
+
+  switch (currency) {
+    case 'USD': locale = 'en-US'; fraction = 2; break;
+    case 'SGD': locale = 'en-SG'; fraction = 2; break;
+    case 'MYR': locale = 'ms-MY'; fraction = 2; break;
+    case 'EUR': locale = 'de-DE'; fraction = 2; break;
+    default: locale = 'id-ID'; fraction = 0; break;
+  }
+
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
-    maximumFractionDigits: 0,
+    maximumFractionDigits: fraction,
+    minimumFractionDigits: fraction,
   }).format(amount);
 };
 
 export const formatCurrencyCompact = (amount: number) => {
+  let currency = 'IDR';
+  if (typeof window !== 'undefined') {
+    currency = localStorage.getItem('business_currency') || 'IDR';
+  }
+  
+  const symbolMap: Record<string, string> = {
+    'USD': '$',
+    'SGD': 'S$',
+    'MYR': 'RM',
+    'EUR': '€',
+    'IDR': 'Rp'
+  };
+  const symbol = symbolMap[currency] || currency;
+
   if (amount >= 1_000_000_000) {
-    return `Rp ${(amount / 1_000_000_000).toFixed(1)}M`;
+    return `${symbol} ${(amount / 1_000_000_000).toFixed(1)}M`;
   }
   if (amount >= 1_000_000) {
-    return `Rp ${(amount / 1_000_000).toFixed(1)}jt`;
+    return `${symbol} ${(amount / 1_000_000).toFixed(1)}jt`;
   }
   if (amount >= 1_000) {
-    return `Rp ${(amount / 1_000).toFixed(0)}rb`;
+    return `${symbol} ${(amount / 1_000).toFixed(0)}rb`;
   }
-  return `Rp ${amount}`;
+  return `${symbol} ${amount}`;
 };
 
 export const formatDate = (date: string | Date, formatStr = 'dd MMM yyyy') => {

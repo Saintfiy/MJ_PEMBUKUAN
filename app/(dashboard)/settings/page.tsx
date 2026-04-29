@@ -1,9 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button } from '@/components/ui';
-import { FiSave, FiUserCheck, FiLock, FiBell, FiGlobe, FiToggleLeft, FiToggleRight, FiShield, FiLogOut } from 'react-icons/fi';
+import {
+  FiSave, FiUserCheck, FiLock, FiBell, FiGlobe,
+  FiToggleLeft, FiToggleRight, FiShield, FiLogOut,
+  FiCamera, FiUser,
+} from 'react-icons/fi';
+import { motion } from 'framer-motion';
 import { useNotificationStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
@@ -11,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 const SettingsPage = () => {
   const { user, business, logout } = useAuth({ requireAuth: true });
   const { addNotification } = useNotificationStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [profileData, setProfileData] = useState({ full_name: '', email: '', phone: '' });
   const [businessData, setBusinessData] = useState({ name: '', industry: '', currency: 'IDR', country: 'ID', phone: '', address: '' });
@@ -19,8 +25,10 @@ const SettingsPage = () => {
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingBusiness, setSavingBusiness] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
-  // Populate fields from loaded user/business data
   useEffect(() => {
     if (user) {
       setProfileData({
@@ -28,6 +36,13 @@ const SettingsPage = () => {
         email: user.email || '',
         phone: (user as any).phone || '',
       });
+      setAvatarUrl((user as any).avatar_url || null);
+      
+      // Load notifikasi
+      const prefs = (user as any).notification_preferences;
+      if (prefs && Array.isArray(prefs)) {
+        setNotifStates(prefs);
+      }
     }
   }, [user]);
 
@@ -43,6 +58,62 @@ const SettingsPage = () => {
       });
     }
   }, [business]);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (!file.type.startsWith('image/')) {
+      addNotification('Hanya file gambar yang diperbolehkan', 'error');
+      return;
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      addNotification('Ukuran foto maksimal 3 MB', 'error');
+      return;
+    }
+
+    // Tampilkan preview lokal dulu
+    const reader = new FileReader();
+    reader.onload = e => setAvatarPreview(e.target?.result as string);
+    reader.readAsDataURL(file);
+
+    setUploadingAvatar(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      // Pakai timestamp agar selalu INSERT baru (hindari UPDATE policy)
+      const filePath = `avatars/${user.id}_${Date.now()}.${fileExt}`;
+
+      // Upload ke Supabase Storage bucket "logos" (public)
+      const { error: uploadError } = await supabase.storage
+        .from('logos')
+        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('logos')
+        .getPublicUrl(filePath);
+
+      // Simpan URL ke tabel users
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ avatar_url: publicUrl })
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      setAvatarPreview(null);
+      addNotification('Foto profil berhasil diperbarui!', 'success');
+    } catch (err: any) {
+      setAvatarPreview(null);
+      addNotification(err.message || 'Gagal mengupload foto', 'error');
+    } finally {
+      setUploadingAvatar(false);
+      // Reset input agar file yang sama bisa dipilih ulang
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +146,16 @@ const SettingsPage = () => {
         address: businessData.address || null,
       }).eq('id', business.id);
       if (error) throw error;
+      
+      // Update currency formatting globally
+      localStorage.setItem('business_currency', businessData.currency);
+      
       addNotification('Pengaturan bisnis disimpan!', 'success');
+      
+      // Reload page to apply currency formatting across all components
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (err: any) {
       addNotification(err.message || 'Gagal menyimpan bisnis', 'error');
     } finally {
@@ -106,9 +186,26 @@ const SettingsPage = () => {
     }
   };
 
-  const toggleNotif = (idx: number) => {
-    setNotifStates(prev => prev.map((v, i) => i === idx ? !v : v));
+  const toggleNotif = async (idx: number) => {
+    const newStates = notifStates.map((v, i) => i === idx ? !v : v);
+    setNotifStates(newStates);
+    
+    // Simpan ke db
+    if (user) {
+      try {
+        await supabase.from('users').update({
+          notification_preferences: newStates
+        }).eq('id', user.id);
+      } catch (err) {
+        console.error('Failed to save notification preferences', err);
+      }
+    }
   };
+
+  const displayAvatar = avatarPreview || avatarUrl;
+  const initials = profileData.full_name
+    ? profileData.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : '?';
 
   return (
     <DashboardLayout title="Pengaturan">
@@ -116,9 +213,64 @@ const SettingsPage = () => {
 
         {/* Profil */}
         <Card>
-          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
             <FiUserCheck /> Pengaturan Profil
           </h3>
+
+          {/* Avatar section */}
+          <div className="flex items-center gap-5 mb-6 pb-6 border-b border-white/10">
+            <div className="relative group">
+              <div className="w-20 h-20 rounded-full overflow-hidden bg-primary/20 border-2 border-white/10 flex items-center justify-center">
+                {displayAvatar ? (
+                  <img
+                    src={displayAvatar}
+                    alt="Foto profil"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl font-bold text-primary">{initials}</span>
+                )}
+              </div>
+
+              {/* Overlay hover */}
+              <motion.button
+                whileHover={{ opacity: 1 }}
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAvatar}
+                className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+              >
+                {uploadingAvatar ? (
+                  <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <FiCamera size={20} className="text-white" />
+                )}
+              </motion.button>
+            </div>
+
+            <div className="flex-1">
+              <p className="font-semibold text-sm">{profileData.full_name || 'Pengguna'}</p>
+              <p className="text-xs text-white/50 mt-0.5">{profileData.email}</p>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAvatar}
+                className="mt-2 text-xs text-primary hover:text-primary/80 transition-smooth flex items-center gap-1.5 disabled:opacity-50"
+              >
+                <FiCamera size={12} />
+                {uploadingAvatar ? 'Mengupload...' : 'Ganti foto profil'}
+              </button>
+              <p className="text-xs text-white/30 mt-1">JPG, PNG, WEBP · Maks. 3 MB</p>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleAvatarChange}
+            />
+          </div>
+
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-white/80 mb-2">Nama Lengkap</label>
@@ -236,6 +388,7 @@ const SettingsPage = () => {
             ))}
           </div>
         </Card>
+
         {/* Keluar */}
         <Card className="border border-red-500/20 bg-red-500/5">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

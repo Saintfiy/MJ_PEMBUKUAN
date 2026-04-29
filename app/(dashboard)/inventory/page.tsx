@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button, StatCard, Modal } from '@/components/ui';
-import { FiPlus, FiEdit2, FiTrash2, FiAlertTriangle, FiBell, FiDownload } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiAlertTriangle, FiBell, FiDownload, FiBox, FiDollarSign } from 'react-icons/fi';
 import { formatCurrency, exportToCSV } from '@/utils/helpers';
 import { useNotificationStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
@@ -157,9 +157,9 @@ export default function InventoryPage() {
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard label="Total Item" value={inventory.length} icon="📦" />
-          <StatCard label="Item Stok Rendah" value={lowStockItems.length} icon="⚠️" />
-          <StatCard label="Nilai Inventori" value={formatCurrency(totalValue)} icon="💰" />
+          <StatCard label="Total Item" value={inventory.length} icon={<FiBox />} />
+          <StatCard label="Item Stok Rendah" value={lowStockItems.length} icon={<FiAlertTriangle />} />
+          <StatCard label="Nilai Inventori" value={formatCurrency(totalValue)} icon={<FiDollarSign />} />
         </div>
 
         {/* Header */}

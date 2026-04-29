@@ -4,10 +4,17 @@ import { motion } from 'framer-motion';
 import { FiUser, FiMenu } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import { useUIStore } from '@/store';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Navbar() {
   const router = useRouter();
   const { sidebarOpen, toggleMobileSidebar } = useUIStore();
+  const { user } = useAuth();
+
+  const avatarUrl = (user as any)?.avatar_url ?? null;
+  const initials = user?.full_name
+    ? user.full_name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
+    : null;
 
   return (
     <motion.nav
@@ -17,7 +24,6 @@ export function Navbar() {
         sidebarOpen ? 'lg:left-[260px]' : 'lg:left-[72px]'
       }`}
     >
-
       {/* Left: Hamburger (mobile) */}
       <div className="flex items-center gap-3 flex-1">
         <motion.button
@@ -33,7 +39,6 @@ export function Navbar() {
 
       {/* Right Actions */}
       <div className="flex items-center gap-1 md:gap-3">
-        {/* Profil */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -41,10 +46,18 @@ export function Navbar() {
           className="flex items-center gap-2 px-2 md:px-3 py-2 hover:bg-white/10 rounded-lg transition-smooth"
           aria-label="Profil pengguna"
         >
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 text-darker">
-            <FiUser size={16} />
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-primary/20 flex items-center justify-center flex-shrink-0">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
+            ) : initials ? (
+              <span className="text-xs font-bold text-primary">{initials}</span>
+            ) : (
+              <FiUser size={16} className="text-primary" />
+            )}
           </div>
-          <span className="hidden md:block text-sm font-medium">Profil</span>
+          <span className="hidden md:block text-sm font-medium">
+            {user?.full_name?.split(' ')[0] ?? 'Profil'}
+          </span>
         </motion.button>
       </div>
     </motion.nav>

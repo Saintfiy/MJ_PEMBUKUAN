@@ -30,6 +30,9 @@ export function useAuth({ requireAuth = false } = {}) {
             .eq('id', businessId)
             .maybeSingle();
           setBusiness(biz);
+          if (biz?.currency) {
+            localStorage.setItem('business_currency', biz.currency);
+          }
         } else {
           const { data: ownedBiz } = await supabase
             .from('businesses')
@@ -39,6 +42,9 @@ export function useAuth({ requireAuth = false } = {}) {
             .maybeSingle();
           if (ownedBiz) {
             setBusiness(ownedBiz);
+            if (ownedBiz.currency) {
+              localStorage.setItem('business_currency', ownedBiz.currency);
+            }
             // Keep user record in sync
             await supabase
               .from('users')

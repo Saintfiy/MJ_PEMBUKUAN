@@ -3,13 +3,32 @@
 import { useState, useEffect, useCallback } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button } from '@/components/ui';
-import { FiAward, FiStar, FiRefreshCw } from 'react-icons/fi';
+import { FiAward, FiStar, FiRefreshCw, FiTarget, FiBriefcase, FiDollarSign, FiTrendingUp, FiActivity, FiBox, FiCheckCircle, FiShield } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/utils/helpers';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase';
 
-interface Badge { id: string; emoji: string; title: string; desc: string; unlocked: boolean; condition: string }
+interface Badge {
+  id: string;
+  icon: any;
+  title: string;
+  desc: string;
+  unlocked: boolean;
+  unlockedAt?: string;
+  condition: string;
+}
+
+const BADGE_DEFINITIONS = [
+  { id: 'badge_first_tx',    icon: FiTarget,      title: 'Awal yang Baik',     desc: 'Transaksi pertama dicatat',              condition: '1 transaksi' },
+  { id: 'badge_10_tx',       icon: FiBriefcase,   title: 'Pebisnis Aktif',     desc: '10 transaksi berhasil dicatat',          condition: '10 transaksi' },
+  { id: 'badge_1m_revenue',  icon: FiDollarSign,  title: 'Jutawan Pertama',    desc: 'Pendapatan mencapai Rp 1 juta',          condition: 'Rp 1 juta pendapatan' },
+  { id: 'badge_margin_20',   icon: FiTrendingUp,  title: 'Margin Sehat',       desc: 'Margin keuntungan di atas 20%',          condition: 'Margin > 20%' },
+  { id: 'badge_10m_revenue', icon: FiActivity,    title: 'Penjualan 10 Juta',  desc: 'Total pendapatan Rp 10 juta',            condition: 'Rp 10 juta pendapatan' },
+  { id: 'badge_no_lowstock', icon: FiBox,         title: 'Stok Terjaga',       desc: 'Tidak ada item stok kritis',             condition: 'Tidak ada low stock' },
+  { id: 'badge_50_tx',       icon: FiCheckCircle, title: 'Pengusaha Handal',   desc: '50 transaksi berhasil dicatat',          condition: '50 transaksi' },
+  { id: 'badge_score_90',    icon: FiShield,      title: 'Raja Bisnis',        desc: 'Skor kesehatan bisnis di atas 90',       condition: 'Skor > 90' },
+];
 
 function calcScore(stats: { revenue: number; expense: number; txCount: number; lowStock: number; pendingDebt: number }): number {
   const { revenue, expense, txCount, lowStock, pendingDebt } = stats;
@@ -25,18 +44,20 @@ function calcScore(stats: { revenue: number; expense: number; txCount: number; l
   return Math.max(0, Math.min(100, score));
 }
 
-function getBadges(stats: any): Badge[] {
+function checkBadgeEarned(badgeId: string, stats: { revenue: number; expense: number; txCount: number; lowStock: number; pendingDebt: number; margin: number }): boolean {
   const { revenue, txCount, margin, lowStock } = stats;
-  return [
-    { id: '1', emoji: '🚀', title: 'Awal yang Baik', desc: 'Transaksi pertama dicatat', unlocked: txCount >= 1, condition: '1 transaksi' },
-    { id: '2', emoji: '💼', title: 'Pebisnis Aktif', desc: '10 transaksi berhasil dicatat', unlocked: txCount >= 10, condition: '10 transaksi' },
-    { id: '3', emoji: '💰', title: 'Jutawan Pertama', desc: 'Pendapatan mencapai Rp 1 juta', unlocked: revenue >= 1000000, condition: 'Rp 1 juta pendapatan' },
-    { id: '4', emoji: '📈', title: 'Margin Sehat', desc: 'Margin keuntungan di atas 20%', unlocked: margin >= 0.2, condition: 'Margin > 20%' },
-    { id: '5', emoji: '🏆', title: 'Penjualan 10 Juta', desc: 'Total pendapatan Rp 10 juta', unlocked: revenue >= 10000000, condition: 'Rp 10 juta pendapatan' },
-    { id: '6', emoji: '📦', title: 'Stok Terjaga', desc: 'Tidak ada item stok kritis', unlocked: lowStock === 0, condition: 'Tidak ada low stock' },
-    { id: '7', emoji: '🌟', title: 'Pengusaha Handal', desc: '50 transaksi berhasil dicatat', unlocked: txCount >= 50, condition: '50 transaksi' },
-    { id: '8', emoji: '👑', title: 'Raja Bisnis', desc: 'Skor kesehatan bisnis di atas 90', unlocked: calcScore(stats) >= 90, condition: 'Skor > 90' },
-  ];
+  const score = calcScore(stats);
+  switch (badgeId) {
+    case 'badge_first_tx':    return txCount >= 1;
+    case 'badge_10_tx':       return txCount >= 10;
+    case 'badge_1m_revenue':  return revenue >= 1000000;
+    case 'badge_margin_20':   return margin >= 0.2;
+    case 'badge_10m_revenue': return revenue >= 10000000;
+    case 'badge_no_lowstock': return lowStock === 0 && txCount > 0;
+    case 'badge_50_tx':       return txCount >= 50;
+    case 'badge_score_90':    return score >= 90;
+    default: return false;
+  }
 }
 
 function ScoreRing({ score }: { score: number }) {
@@ -61,34 +82,97 @@ function ScoreRing({ score }: { score: number }) {
 export default function AchievementsPage() {
   const { businessId, user, loading: authLoading } = useAuth({ requireAuth: true });
   const [stats, setStats] = useState({ revenue: 0, expense: 0, txCount: 0, lowStock: 0, pendingDebt: 0, margin: 0 });
+  const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+
+  const syncBadges = useCallback(async (
+    userId: string,
+    currentStats: typeof stats,
+    existingBadgeIds: Set<string>
+  ) => {
+    // Cek badge baru yang baru di-earn
+    const newlyEarned = BADGE_DEFINITIONS.filter(
+      (def) => !existingBadgeIds.has(def.id) && checkBadgeEarned(def.id, currentStats)
+    );
+
+    if (newlyEarned.length > 0) {
+      const inserts = newlyEarned.map((def) => ({
+        user_id: userId,
+        badge: def.id,
+        title: def.title,
+        description: def.desc,
+      }));
+      await supabase.from('achievements').insert(inserts);
+    }
+  }, []);
 
   const loadStats = useCallback(async () => {
-    if (!businessId) return;
+    if (!businessId || !user?.id) return;
     setLoading(true);
-    const [{ data: txData }, { data: invData }, { data: debtData }] = await Promise.all([
-      supabase.from('transactions').select('type,amount').eq('business_id', businessId),
-      supabase.from('inventory').select('quantity,reorder_level').eq('business_id', businessId),
-      supabase.from('debts').select('status').eq('business_id', businessId),
-    ]);
-    const transactions = txData || [];
-    const revenue = transactions.filter((t: any) => t.type === 'income').reduce((s: number, t: any) => s + t.amount, 0);
-    const expense = transactions.filter((t: any) => t.type === 'expense').reduce((s: number, t: any) => s + t.amount, 0);
-    const lowStock = (invData || []).filter((i: any) => i.quantity <= i.reorder_level).length;
-    const pendingDebt = (debtData || []).filter((d: any) => d.status === 'pending' || d.status === 'overdue').length;
-    const margin = revenue > 0 ? (revenue - expense) / revenue : 0;
-    setStats({ revenue, expense, txCount: transactions.length, lowStock, pendingDebt, margin });
-    setLoading(false);
-  }, [businessId]);
+    setSyncing(true);
+
+    try {
+      // 1. Ambil data transaksi, inventori, hutang, dan achievements dari DB secara paralel
+      const [
+        { data: txData },
+        { data: invData },
+        { data: debtData },
+        { data: achData },
+      ] = await Promise.all([
+        supabase.from('transactions').select('type,amount').eq('business_id', businessId),
+        supabase.from('inventory').select('quantity,reorder_level').eq('business_id', businessId),
+        supabase.from('debts').select('status').eq('business_id', businessId),
+        supabase.from('achievements').select('badge,unlocked_at').eq('user_id', user.id),
+      ]);
+
+      // 2. Hitung statistik
+      const transactions = txData || [];
+      const revenue = transactions.filter((t: any) => t.type === 'income').reduce((s: number, t: any) => s + t.amount, 0);
+      const expense = transactions.filter((t: any) => t.type === 'expense').reduce((s: number, t: any) => s + t.amount, 0);
+      const lowStock = (invData || []).filter((i: any) => i.quantity <= i.reorder_level).length;
+      const pendingDebt = (debtData || []).filter((d: any) => d.status === 'pending' || d.status === 'overdue').length;
+      const margin = revenue > 0 ? (revenue - expense) / revenue : 0;
+      const currentStats = { revenue, expense, txCount: transactions.length, lowStock, pendingDebt, margin };
+      setStats(currentStats);
+
+      // 3. Buat set badge yang sudah tersimpan di DB
+      const savedBadges = achData || [];
+      const existingBadgeIds = new Set(savedBadges.map((a: any) => a.badge));
+      const savedBadgeMap = new Map(savedBadges.map((a: any) => [a.badge, a.unlocked_at]));
+
+      // 4. Sync badge baru ke DB
+      await syncBadges(user.id, currentStats, existingBadgeIds);
+
+      // 5. Reload achievements setelah sync (supaya unlocked_at baru juga ikut)
+      const { data: freshAch } = await supabase
+        .from('achievements')
+        .select('badge,unlocked_at')
+        .eq('user_id', user.id);
+
+      const freshMap = new Map((freshAch || []).map((a: any) => [a.badge, a.unlocked_at]));
+
+      // 6. Gabungkan badge definition dengan status DB
+      const finalBadges: Badge[] = BADGE_DEFINITIONS.map((def) => ({
+        ...def,
+        unlocked: freshMap.has(def.id),
+        unlockedAt: freshMap.get(def.id) ?? undefined,
+      }));
+
+      setBadges(finalBadges);
+    } finally {
+      setLoading(false);
+      setSyncing(false);
+    }
+  }, [businessId, user?.id, syncBadges]);
 
   useEffect(() => {
     if (authLoading) return;
-    if (!businessId) { setLoading(false); return; }
+    if (!businessId || !user?.id) { setLoading(false); return; }
     loadStats();
-  }, [authLoading, businessId, loadStats]);
+  }, [authLoading, businessId, user?.id, loadStats]);
 
   const score = calcScore(stats);
-  const badges = getBadges(stats);
   const unlocked = badges.filter(b => b.unlocked).length;
   const healthLabel = score >= 80 ? 'Sangat Sehat' : score >= 60 ? 'Cukup Sehat' : score >= 40 ? 'Perlu Perhatian' : 'Kritis';
   const healthColor = score >= 80 ? 'text-green-400' : score >= 60 ? 'text-yellow-400' : score >= 40 ? 'text-orange-400' : 'text-red-400';
@@ -97,7 +181,10 @@ export default function AchievementsPage() {
     <DashboardLayout title="Prestasi & Skor Bisnis">
       <div className="space-y-6">
         {loading ? (
-          <div className="flex justify-center py-16"><div className="w-8 h-8 border-2 border-primary/40 border-t-primary rounded-full animate-spin" /></div>
+          <div className="flex flex-col items-center gap-3 py-16">
+            <div className="w-8 h-8 border-2 border-primary/40 border-t-primary rounded-full animate-spin" />
+            <p className="text-sm text-white/40">{syncing ? 'Menyinkronkan prestasi...' : 'Memuat data...'}</p>
+          </div>
         ) : (
           <>
             {/* Health Score */}
@@ -124,8 +211,13 @@ export default function AchievementsPage() {
                     </div>
                   ))}
                 </div>
-                <button onClick={loadStats} className="mt-4 flex items-center gap-2 text-xs text-white/40 hover:text-white transition-smooth">
-                  <FiRefreshCw size={12} /> Refresh data
+                <button
+                  onClick={loadStats}
+                  disabled={syncing}
+                  className="mt-4 flex items-center gap-2 text-xs text-white/40 hover:text-white transition-smooth disabled:opacity-50"
+                >
+                  <FiRefreshCw size={12} className={syncing ? 'animate-spin' : ''} />
+                  {syncing ? 'Menyinkronkan...' : 'Refresh & sinkron data'}
                 </button>
               </Card>
             </div>
@@ -140,11 +232,20 @@ export default function AchievementsPage() {
                 {badges.map((badge, idx) => (
                   <motion.div key={badge.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.06 }}>
                     <Card hover={false} className={`text-center transition-smooth ${!badge.unlocked ? 'opacity-40 grayscale' : ''}`}>
-                      <div className={`text-4xl mb-3 ${badge.unlocked ? '' : 'filter grayscale'}`}>{badge.emoji}</div>
+                      <div className={`text-4xl mb-3 flex justify-center text-primary ${badge.unlocked ? '' : 'filter grayscale opacity-50'}`}>
+                        <badge.icon />
+                      </div>
                       <p className="font-semibold text-sm">{badge.title}</p>
                       <p className="text-xs text-white/50 mt-1">{badge.desc}</p>
                       {badge.unlocked ? (
-                        <span className="mt-2 inline-flex items-center gap-1 text-xs text-green-400"><FiStar size={10} /> Terbuka</span>
+                        <div className="mt-2">
+                          <span className="inline-flex items-center gap-1 text-xs text-green-400"><FiStar size={10} /> Terbuka</span>
+                          {badge.unlockedAt && (
+                            <p className="text-xs text-white/25 mt-0.5">
+                              {new Date(badge.unlockedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </p>
+                          )}
+                        </div>
                       ) : (
                         <span className="mt-2 block text-xs text-white/30">{badge.condition}</span>
                       )}

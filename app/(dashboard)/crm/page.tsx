@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button, StatCard, Modal } from '@/components/ui';
-import { FiPlus, FiSearch, FiPhone, FiMail, FiEdit2, FiTrash2, FiUser } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiPhone, FiMail, FiEdit2, FiTrash2, FiUser, FiUsers, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 import { formatCurrency, formatDate } from '@/utils/helpers';
 import { motion } from 'framer-motion';
 import { useNotificationStore } from '@/store';
@@ -152,9 +152,9 @@ export default function CRMPage() {
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard label="Total Pelanggan" value={customers.length} icon="👥" />
-          <StatCard label="Total Pendapatan" value={formatCurrency(totalRevenue)} icon="💰" />
-          <StatCard label="Rata-rata Nilai" value={formatCurrency(avgValue)} icon="📊" />
+          <StatCard label="Total Pelanggan" value={customers.length} icon={<FiUsers />} />
+          <StatCard label="Total Pendapatan" value={formatCurrency(totalRevenue)} icon={<FiDollarSign />} />
+          <StatCard label="Rata-rata Nilai" value={formatCurrency(avgValue)} icon={<FiBarChart2 />} />
         </div>
 
         {/* Search & Add */}
