@@ -3,26 +3,27 @@
 import { useState } from 'react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, Button } from '@/components/ui';
-import { FiLink, FiCheckCircle, FiExternalLink, FiCode, FiCopy, FiZap, FiSettings, FiTrash2, FiPlus, FiLoader } from 'react-icons/fi';
+import { FiLink, FiCheckCircle, FiExternalLink, FiCode, FiCopy, FiZap, FiSettings, FiTrash2, FiPlus, FiLoader, FiSmartphone, FiCreditCard, FiShoppingBag, FiShoppingCart, FiBox } from 'react-icons/fi';
+import { FaQrcode, FaUniversity, FaTiktok, FaWallet } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNotificationStore } from '@/store';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useAuth } from '@/hooks/useAuth';
 
 const paymentMethods = [
-  { id: 'qris', name: 'QRIS', desc: 'Scan QR untuk semua e-wallet & mobile banking', icon: '📱', color: 'from-blue-500/20 to-blue-600/5 border-blue-500/30', status: 'Siap Diaktifkan' },
-  { id: 'gojek', name: 'GoPay', desc: 'Terima pembayaran via GoJek', icon: '🟢', color: 'from-green-500/20 to-green-600/5 border-green-500/30', status: 'Siap Diaktifkan' },
-  { id: 'ovo', name: 'OVO', desc: 'Integrasi dengan OVO merchant', icon: '💜', color: 'from-purple-500/20 to-purple-600/5 border-purple-500/30', status: 'Siap Diaktifkan' },
-  { id: 'bca', name: 'BCA Virtual Account', desc: 'Terima transfer via VA BCA', icon: '🏦', color: 'from-blue-400/20 to-blue-500/5 border-blue-400/30', status: 'Segera Hadir' },
-  { id: 'mandiri', name: 'Mandiri VA', desc: 'Virtual Account Bank Mandiri', icon: '🏦', color: 'from-yellow-500/20 to-yellow-600/5 border-yellow-500/30', status: 'Segera Hadir' },
-  { id: 'dana', name: 'DANA', desc: 'Terima pembayaran via DANA', icon: '💙', color: 'from-sky-500/20 to-sky-600/5 border-sky-500/30', status: 'Siap Diaktifkan' },
+  { id: 'qris', name: 'QRIS', desc: 'Scan QR untuk semua e-wallet & mobile banking', icon: <FaQrcode />, color: 'from-blue-500/20 to-blue-600/5 border-blue-500/30', status: 'Siap Diaktifkan' },
+  { id: 'gojek', name: 'GoPay', desc: 'Terima pembayaran via GoJek', icon: <FaWallet />, color: 'from-green-500/20 to-green-600/5 border-green-500/30', status: 'Siap Diaktifkan' },
+  { id: 'ovo', name: 'OVO', desc: 'Integrasi dengan OVO merchant', icon: <FiSmartphone />, color: 'from-purple-500/20 to-purple-600/5 border-purple-500/30', status: 'Siap Diaktifkan' },
+  { id: 'bca', name: 'BCA Virtual Account', desc: 'Terima transfer via VA BCA', icon: <FaUniversity />, color: 'from-blue-400/20 to-blue-500/5 border-blue-400/30', status: 'Segera Hadir' },
+  { id: 'mandiri', name: 'Mandiri VA', desc: 'Virtual Account Bank Mandiri', icon: <FaUniversity />, color: 'from-yellow-500/20 to-yellow-600/5 border-yellow-500/30', status: 'Segera Hadir' },
+  { id: 'dana', name: 'DANA', desc: 'Terima pembayaran via DANA', icon: <FiCreditCard />, color: 'from-sky-500/20 to-sky-600/5 border-sky-500/30', status: 'Siap Diaktifkan' },
 ];
 
 const ecommerceChannels = [
-  { name: 'Tokopedia', icon: '🛒', color: 'bg-green-500/10 text-green-400', desc: 'Sinkronisasi pesanan & stok otomatis', badge: 'Populer' },
-  { name: 'Shopee', icon: '🧡', color: 'bg-orange-500/10 text-orange-400', desc: 'Auto-import transaksi dari Shopee Seller', badge: 'Populer' },
-  { name: 'Lazada', icon: '🔵', color: 'bg-blue-500/10 text-blue-400', desc: 'Kelola pesanan Lazada di satu tempat', badge: '' },
-  { name: 'TikTok Shop', icon: '⚫', color: 'bg-white/5 text-white', desc: 'Integrasi dengan TikTok Shop seller center', badge: 'Baru' },
+  { name: 'Tokopedia', icon: <FiShoppingBag />, color: 'bg-green-500/10 text-green-400', desc: 'Sinkronisasi pesanan & stok otomatis', badge: 'Populer' },
+  { name: 'Shopee', icon: <FiShoppingCart />, color: 'bg-orange-500/10 text-orange-400', desc: 'Auto-import transaksi dari Shopee Seller', badge: 'Populer' },
+  { name: 'Lazada', icon: <FiBox />, color: 'bg-blue-500/10 text-blue-400', desc: 'Kelola pesanan Lazada di satu tempat', badge: '' },
+  { name: 'TikTok Shop', icon: <FaTiktok />, color: 'bg-white/5 text-white', desc: 'Integrasi dengan TikTok Shop seller center', badge: 'Baru' },
 ];
 
 const apiEndpoints = [

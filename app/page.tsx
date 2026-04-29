@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import {
   FiArrowRight, FiTrendingUp, FiCpu, FiShield,
-  FiZap, FiBarChart2, FiUsers
+  FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiStar
 } from 'react-icons/fi';
 
 const features = [
@@ -51,7 +51,7 @@ const stats = [
   { value: '10K+', label: 'Pengguna Aktif' },
   { value: '99.9%', label: 'Uptime' },
   { value: 'Rp 50M+', label: 'Transaksi Tercatat' },
-  { value: '4.9 ⭐', label: 'Rating Pengguna' },
+  { value: '4.9/5', label: 'Rating Pengguna' },
 ];
 
 const containerVariants = {
@@ -213,17 +213,17 @@ export default function Home() {
             >
               {[
                 {
-                  emoji: '🤖',
+                  icon: <FiCpu />,
                   title: 'AI yang Benar-benar Bekerja',
                   desc: 'Asisten AI DuitTrack bukan chatbot biasa. Ia membaca data transaksi Anda, mendeteksi pola pengeluaran, dan memberi rekomendasi nyata — bukan saran generik.',
                 },
                 {
-                  emoji: '⚡',
+                  icon: <FiZap />,
                   title: 'Satu Platform, Semua Kebutuhan',
                   desc: 'Dari pembukuan harian, laporan keuangan, manajemen inventori, CRM pelanggan, hingga integrasi marketplace — semua ada di satu tempat. Tidak perlu berpindah-pindah aplikasi.',
                 },
                 {
-                  emoji: '🔒',
+                  icon: <FiShield />,
                   title: 'Keamanan Tingkat Enterprise',
                   desc: 'Data Anda dilindungi dengan enkripsi penuh, Row-Level Security Supabase, dan autentikasi aman. Hanya Anda yang bisa mengakses data bisnis Anda sendiri.',
                 },
@@ -236,7 +236,7 @@ export default function Home() {
                   whileHover={{ y: -4, borderColor: 'rgba(139,92,246,0.4)' }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
-                  <div className="text-4xl mb-4">{item.emoji}</div>
+                  <div className="text-4xl mb-4 text-primary">{item.icon}</div>
                   <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
                   <p className="text-white/55 text-sm leading-relaxed">{item.desc}</p>
                 </motion.div>
@@ -313,7 +313,7 @@ export default function Home() {
             >
               {/* Old Way */}
               <div className="p-7 rounded-2xl border border-red-500/20" style={{ background: 'rgba(239,68,68,0.05)' }}>
-                <p className="text-red-400 font-bold text-sm uppercase tracking-widest mb-5">❌ Cara Konvensional</p>
+                <p className="text-red-400 font-bold text-sm uppercase tracking-widest mb-5 flex items-center gap-2"><FiX size={16} /> Cara Konvensional</p>
                 <ul className="space-y-3 text-white/60 text-sm">
                   {[
                     'Catat manual di buku / Excel setiap hari',
@@ -324,7 +324,7 @@ export default function Home() {
                     'Tidak ada peringatan jika keuangan mulai bermasalah',
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2.5">
-                      <span className="text-red-400 mt-0.5 flex-shrink-0">✗</span>
+                      <span className="text-red-400 mt-0.5 flex-shrink-0"><FiX /></span>
                       {item}
                     </li>
                   ))}
@@ -333,7 +333,7 @@ export default function Home() {
 
               {/* DuitTrack */}
               <div className="p-7 rounded-2xl border border-primary/30" style={{ background: 'rgba(139,92,246,0.08)' }}>
-                <p className="text-primary font-bold text-sm uppercase tracking-widest mb-5">✅ Dengan DuitTrack</p>
+                <p className="text-primary font-bold text-sm uppercase tracking-widest mb-5 flex items-center gap-2"><FiCheck size={16} /> Dengan DuitTrack</p>
                 <ul className="space-y-3 text-white/70 text-sm">
                   {[
                     'Catat transaksi dalam hitungan detik, atau scan struk otomatis',
@@ -344,7 +344,7 @@ export default function Home() {
                     'AI aktif memantau dan memberi peringatan dini otomatis',
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2.5">
-                      <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
+                      <span className="text-primary mt-0.5 flex-shrink-0"><FiCheck /></span>
                       {item}
                     </li>
                   ))}
