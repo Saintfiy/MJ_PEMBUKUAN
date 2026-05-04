@@ -154,22 +154,17 @@ export const PrismaHero = () => {
               transition={{ duration: 0.7, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-wrap items-center gap-4"
             >
-              <Link
-                href="/register"
+              <a
+                href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-indigo-600 text-white text-sm font-bold
                            hover:bg-indigo-500 active:scale-95 transition-all duration-200
                            shadow-lg shadow-indigo-500/30"
               >
-                Pesan Sekarang
+                Kesana Sekarang
                 <FiArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 text-sm font-semibold
-                           hover:bg-slate-50 active:scale-95 transition-all duration-200 shadow-sm"
-              >
-                Masuk
-              </Link>
+              </a>
             </motion.div>
 
             {/* Stats row */}
@@ -183,7 +178,7 @@ export const PrismaHero = () => {
               <div className="w-px h-8 bg-slate-200" />
               <MiniStat value="100K+" label="Proyek cetak selesai" delay={0.9} />
               <div className="w-px h-8 bg-slate-200" />
-              <MiniStat value="4.9★" label="Rating layanan" delay={0.95} />
+              <MiniStat value="4.6★" label="Rating layanan" delay={0.95} />
             </motion.div>
           </div>
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   FiArrowRight, FiTrendingUp, FiCpu, FiShield,
-  FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiSend, FiImage, FiLock, FiGlobe, FiPieChart
+  FiZap, FiBarChart2, FiUsers, FiX, FiCheck, FiSend, FiImage, FiLock, FiGlobe, FiPieChart, FiTag, FiPenTool, FiTruck
 } from 'react-icons/fi';
 import { PrismaHero } from '@/components/ui/prisma-hero';
 import { FeatureShowcase } from '@/components/ui/feature-showcase';
@@ -164,7 +164,7 @@ const features = [
     preview: <SpeedPreview />
   },
   {
-    icon: <FiBarChart2 />,
+    icon: <FiTag />,
     color: 'text-amber-500',
     baseColor: 'bg-amber-500',
     accentBg: 'bg-amber-50',
@@ -173,7 +173,7 @@ const features = [
     preview: <PricePreview />
   },
   {
-    icon: <FiCpu />,
+    icon: <FiPenTool />,
     color: 'text-emerald-500',
     baseColor: 'bg-emerald-500',
     accentBg: 'bg-emerald-50',
@@ -191,7 +191,7 @@ const features = [
     preview: <OrderPreview />
   },
   {
-    icon: <FiGlobe />,
+    icon: <FiTruck />,
     color: 'text-violet-500',
     baseColor: 'bg-violet-500',
     accentBg: 'bg-violet-50',
@@ -228,8 +228,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/login" className="hidden sm:block text-sm font-semibold text-slate-600 hover:text-slate-900 px-3">Masuk</Link>
-            <Link href="/login" className="btn-primary py-2 px-5 text-xs">Masuk ke Dashboard</Link>
+            <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary py-2 px-5 text-xs">Kesana Sekarang</a>
           </div>
         </div>
       </motion.nav>
@@ -241,7 +240,7 @@ export default function Home() {
       <section id="fitur" className="py-24 px-6 relative bg-white border-y border-slate-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-indigo-600 font-bold text-sm tracking-widest uppercase mb-3">Fitur Canggih</h2>
+            <h2 className="text-indigo-600 font-bold text-sm tracking-widest uppercase mb-3">Melayani</h2>
             <h3 className="font-display font-black text-3xl md:text-5xl text-slate-900 mb-4 tracking-tight">
               Solusi Cetak Cepat <br/>Kualitas Teratas
             </h3>
@@ -319,9 +318,9 @@ export default function Home() {
         <p className="text-slate-500 text-lg mb-8 max-w-lg mx-auto">
           Hubungi kami sekarang untuk harga terbaik dan proses cetak yang super cepat.
         </p>
-        <Link href="/login" className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
-          Pesan Sekarang <FiArrowRight />
-        </Link>
+        <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
+          Kesana Sekarang <FiArrowRight />
+        </a>
       </section>
 
       {/* ── FOOTER ── */}
