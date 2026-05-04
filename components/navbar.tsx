@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export function Navbar() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const avatarUrl = (user as any)?.avatar_url ?? null;
   const initials = user?.full_name
@@ -90,7 +90,7 @@ export function Navbar() {
                 </button>
                 
                 <button
-                  onClick={() => { setDropdownOpen(false); useAuth().logout(); }}
+                  onClick={() => { setDropdownOpen(false); logout(); }}
                   className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-colors"
                 >
                   <FiLogOut size={16} /> Keluar
