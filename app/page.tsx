@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FiArrowRight, FiZap, FiTag, FiPenTool, FiImage, FiCheckCircle } from 'react-icons/fi';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { FiArrowRight, FiZap, FiTag, FiPenTool, FiImage, FiCheckCircle, FiClock, FiStar, FiShield } from 'react-icons/fi';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import { LampContainer } from '@/components/ui/lamp';
 
@@ -59,8 +59,21 @@ const features = [
 ];
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-slate-800 selection:text-white overflow-hidden">
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-white selection:text-slate-950 overflow-x-hidden">
+      
+      {/* ── SCROLL PROGRESS ── */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-white origin-left z-[100]"
+        style={{ scaleX }}
+      />
       
       {/* ── NAVBAR ── */}
       <motion.nav
@@ -186,30 +199,6 @@ export default function Home() {
         </div>
         
         {/* Complex Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: idx * 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative overflow-hidden rounded-[2rem] bg-slate-900/50 border border-slate-800 backdrop-blur-md p-8 md:p-10 flex flex-col justify-end min-h-[300px] transition-all duration-500 hover:-translate-y-2 ${feature.borderGlow} ${feature.colSpan}`}
-            >
-              {/* Dynamic Gradient Background on Hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-              
-              {/* Abstract Visuals */}
-              {feature.visual}
-
-              {/* Glassmorphism Icon Container */}
-              <div className="relative z-10 w-14 h-14 rounded-2xl bg-slate-800/80 border border-slate-700/50 flex items-center justify-center text-slate-300 mb-8 group-hover:scale-110 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-500 backdrop-blur-xl">
-                {feature.icon}
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10 mt-auto">
-                <h4 className="text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all duration-300">
                   {feature.title}
                 </h4>
                 <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-sm">
