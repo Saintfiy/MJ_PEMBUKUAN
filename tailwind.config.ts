@@ -14,9 +14,9 @@ const config: Config = {
         display: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        primary: '#6366f1',
-        'primary-light': '#818cf8',
-        'primary-dark': '#4f46e5',
+        primary: '#64748b',
+        'primary-light': '#94a3b8',
+        'primary-dark': '#475569',
         secondary: '#EC4899',
         accent: '#f59e0b',
         surface: '#ffffff',
@@ -31,23 +31,23 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'mesh': `
-          radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
-          radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 60%)
+          radial-gradient(ellipse at 20% 20%, rgba(100, 116, 139, 0.08) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 80%, rgba(71, 85, 105, 0.06) 0%, transparent 60%)
         `,
       },
       backdropBlur: {
         xs: '2px',
       },
       boxShadow: {
-        'glow': '0 0 40px rgba(99, 102, 241, 0.15), 0 4px 24px rgba(0, 0, 0, 0.05)',
+        'glow': '0 0 40px rgba(100, 116, 139, 0.15), 0 4px 24px rgba(0, 0, 0, 0.05)',
         'card': '0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)',
         'elevated': '0 4px 6px -1px rgba(0,0,0,0.05), 0 20px 60px rgba(0,0,0,0.08)',
-        'indigo': '0 8px 30px rgba(99, 102, 241, 0.25)',
+        'slate': '0 8px 30px rgba(100, 116, 139, 0.25)',
       },
       keyframes: {
         glow: {
-          '0%, 100%': { textShadow: '0 0 20px rgba(99, 102, 241, 0.4)' },
-          '50%': { textShadow: '0 0 40px rgba(99, 102, 241, 0.7)' },
+          '0%, 100%': { textShadow: '0 0 20px rgba(100, 116, 139, 0.4)' },
+          '50%': { textShadow: '0 0 40px rgba(100, 116, 139, 0.7)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },

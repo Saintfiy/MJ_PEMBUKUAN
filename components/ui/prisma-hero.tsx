@@ -50,7 +50,7 @@ const MiniStat = ({ value, label, delay }: { value: string; label: string; delay
     transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
     className="flex flex-col"
   >
-    <span className="text-2xl font-bold text-indigo-600 font-display">{value}</span>
+    <span className="text-2xl font-bold text-slate-600 font-display">{value}</span>
     <span className="text-xs text-slate-500 font-medium mt-0.5">{label}</span>
   </motion.div>
 );
@@ -92,7 +92,7 @@ export const PrismaHero = () => {
   return (
     <section className="relative min-h-screen w-full overflow-hidden hero-gradient flex items-center">
       {/* Decorative orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-indigo-500/8 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-slate-500/8 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-violet-500/6 blur-[100px] pointer-events-none" />
       <div className="absolute top-[30%] left-[40%] w-[300px] h-[300px] rounded-full bg-amber-400/5 blur-[80px] pointer-events-none" />
 
@@ -115,9 +115,9 @@ export const PrismaHero = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold"
+              className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-semibold"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse" />
               Layanan Cetak Digital
             </motion.div>
 
@@ -158,9 +158,9 @@ export const PrismaHero = () => {
                 href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-indigo-600 text-white text-sm font-bold
-                           hover:bg-indigo-500 active:scale-95 transition-all duration-200
-                           shadow-lg shadow-indigo-500/30"
+                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-slate-600 text-white text-sm font-bold
+                           hover:bg-slate-500 active:scale-95 transition-all duration-200
+                           shadow-lg shadow-slate-500/30"
               >
                 Kesana Sekarang
                 <FiArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
@@ -207,7 +207,7 @@ export const PrismaHero = () => {
               icon={<FiUsers size={16} />}
               label="5000+ Klien"
               sub="Telah Percaya Kami"
-              color="bg-indigo-600"
+              color="bg-slate-600"
               className="-bottom-4 -right-4 md:-right-10"
               delay={1.0}
             />
