@@ -48,7 +48,7 @@ export default function LoginPage() {
         <div className="card p-8 md:p-10">
           <div className="text-center mb-8">
             <Link href="/" className="inline-block text-3xl font-bold gradient-text mb-2">
-              DuitTrack
+              MJ Print
             </Link>
             <p className="text-white/60">Masuk ke akun Anda</p>
           </div>

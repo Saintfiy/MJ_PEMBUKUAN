@@ -118,7 +118,7 @@ export const PrismaHero = () => {
               className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-              Platform Keuangan UMKM #1 Indonesia
+              Layanan Cetak Digital #1 Indonesia
             </motion.div>
 
             {/* Headline */}
@@ -127,13 +127,13 @@ export const PrismaHero = () => {
                 className="font-display font-black tracking-tight leading-[1.08]"
                 style={{ fontSize: "clamp(2.6rem, 5.5vw, 4.5rem)", color: "#0f172a" }}
               >
-                <WordsPullUp text="Kelola Keuangan" />
+                <WordsPullUp text="Cetak Kebutuhan" />
                 <br />
                 <span className="gradient-text">
                   <WordsPullUp text="Bisnis Anda," />
                 </span>
                 <br />
-                <WordsPullUp text="Cerdas & Otomatis" style={{ color: "#0f172a" }} />
+                <WordsPullUp text="Cepat & Premium" style={{ color: "#0f172a" }} />
               </h1>
             </div>
 
@@ -144,7 +144,7 @@ export const PrismaHero = () => {
               transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="text-slate-500 text-lg leading-relaxed max-w-lg"
             >
-              AI + Analitik + OCR dalam satu platform. Dari pencatatan transaksi hingga laporan laba rugi — semua otomatis dan real-time.
+              Dari cetak dokumen, banner, stiker, hingga desain custom. Kualitas cetak premium, proses cepat, dan harga bersahabat.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -160,7 +160,7 @@ export const PrismaHero = () => {
                            hover:bg-indigo-500 active:scale-95 transition-all duration-200
                            shadow-lg shadow-indigo-500/30"
               >
-                Mulai Gratis Sekarang
+                Pesan Sekarang
                 <FiArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link
@@ -179,11 +179,11 @@ export const PrismaHero = () => {
               transition={{ duration: 0.7, delay: 0.8 }}
               className="flex items-center gap-8 pt-4 border-t border-slate-100"
             >
-              <MiniStat value="10K+" label="Pengguna aktif" delay={0.85} />
+              <MiniStat value="5K+" label="Pelanggan puas" delay={0.85} />
               <div className="w-px h-8 bg-slate-200" />
-              <MiniStat value="Rp50M+" label="Transaksi tercatat" delay={0.9} />
+              <MiniStat value="100K+" label="Proyek cetak selesai" delay={0.9} />
               <div className="w-px h-8 bg-slate-200" />
-              <MiniStat value="4.9★" label="Rating pengguna" delay={0.95} />
+              <MiniStat value="4.9★" label="Rating layanan" delay={0.95} />
             </motion.div>
           </div>
 
@@ -199,8 +199,8 @@ export const PrismaHero = () => {
               {/* Dashboard Header */}
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-slate-400 text-xs font-medium">Selamat datang kembali 👋</p>
-                  <p className="text-slate-900 font-bold text-base mt-0.5">Toko Sinar Jaya</p>
+                  <p className="text-slate-400 text-xs font-medium">Status Pesanan 👋</p>
+                  <p className="text-slate-900 font-bold text-base mt-0.5">MJ Print Online</p>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
                   <div className="w-3 h-3 rounded-full bg-white" />
@@ -210,12 +210,12 @@ export const PrismaHero = () => {
               {/* Revenue Card */}
               <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 mb-4 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <p className="text-indigo-200 text-xs font-medium mb-1">Total Pemasukan Bulan Ini</p>
-                <p className="text-white font-black text-3xl">Rp 24,6 Jt</p>
+                <p className="text-indigo-200 text-xs font-medium mb-1">Pesanan Selesai Bulan Ini</p>
+                <p className="text-white font-black text-3xl">1,245</p>
                 <div className="flex items-center gap-1.5 mt-2">
                   <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold">
                     <FiTrendingUp size={10} />
-                    +12.4%
+                    +8.2%
                   </div>
                   <span className="text-indigo-200 text-[10px]">dari bulan lalu</span>
                 </div>
@@ -224,8 +224,8 @@ export const PrismaHero = () => {
               {/* Mini stats row */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {[
-                  { label: "Pengeluaran", value: "Rp 9,2 Jt", color: "text-rose-500", bg: "bg-rose-50" },
-                  { label: "Laba Bersih", value: "Rp 15,4 Jt", color: "text-emerald-600", bg: "bg-emerald-50" },
+                  { label: "Dalam Proses", value: "34", color: "text-rose-500", bg: "bg-rose-50" },
+                  { label: "Siap Diambil", value: "12", color: "text-emerald-600", bg: "bg-emerald-50" },
                 ].map((item) => (
                   <div key={item.label} className={`p-4 rounded-2xl ${item.bg} border border-white`}>
                     <p className="text-slate-500 text-[10px] font-medium">{item.label}</p>
@@ -259,16 +259,16 @@ export const PrismaHero = () => {
             {/* Floating badges */}
             <FloatingBadge
               icon={<FiZap size={16} />}
-              label="OCR Aktif"
-              sub="Scan struk otomatis"
+              label="Buka 24 Jam"
+              sub="Siap kapan saja"
               color="bg-amber-500"
               className="-top-4 -left-4 md:-left-12"
               delay={0.8}
             />
             <FloatingBadge
               icon={<FiUsers size={16} />}
-              label="128 Pelanggan"
-              sub="Aktif minggu ini"
+              label="5000+ Klien"
+              sub="Telah Percaya Kami"
               color="bg-indigo-600"
               className="-bottom-4 -right-4 md:-right-10"
               delay={1.0}

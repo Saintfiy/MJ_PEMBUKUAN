@@ -15,11 +15,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="theme-color" content="#0B0F1A" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="DuitTrack" />
+        <meta name="apple-mobile-web-app-title" content="MJ Print" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="description" content="Pembukuan pintar untuk UMKM Indonesia. Kelola keuangan, inventori, dan pelanggan dalam satu platform." />
-        <title>DuitTrack — Pembukuan Pintar untuk UMKM</title>
+        <meta name="description" content="Solusi cetak digital berkualitas untuk kebutuhan promosi dan bisnis Anda. Cepat, murah, dan terpercaya." />
+        <title>MJ Print — Solusi Cetak Digital Berkualitas</title>
       </head>
       <body className="bg-dark text-white antialiased">
         <Providers>{children}</Providers>

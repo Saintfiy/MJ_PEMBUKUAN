@@ -43,7 +43,7 @@ function SidebarContent({ mobile = false, onClose }: { mobile?: boolean; onClose
             animate={{ opacity: 1 }}
             className="text-xl font-bold gradient-text"
           >
-            DuitTrack
+            MJ Print
           </motion.span>
         )}
         {mobile ? (
