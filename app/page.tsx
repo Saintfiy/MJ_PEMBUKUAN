@@ -147,7 +147,7 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 1 }}
-        className="relative overflow-hidden z-10"
+        className="relative overflow-hidden z-10 mt-8"
       >
         <ContainerScroll
           titleComponent={
@@ -162,7 +162,7 @@ export default function Home() {
           {/* Actual Dashboard Image */}
           <div className="w-full h-full rounded-2xl overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-slate-800 bg-slate-900">
             <Image 
-              src="/dashboard-mjprint.jpg" 
+              src="/dashboard-mjprint1.jpg" 
               alt="MJ Print Dashboard" 
               fill 
               className="object-cover object-top"
