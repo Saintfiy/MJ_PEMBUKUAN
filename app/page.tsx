@@ -203,7 +203,7 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900" style={{ backgroundColor: '#ffffff', color: '#0f172a' }}>
       
       {/* ── NAVBAR ── */}
       <motion.nav

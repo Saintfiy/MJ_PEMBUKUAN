@@ -26,8 +26,8 @@ html {
 }
 
 body {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #111318;
+  color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
@@ -107,8 +107,8 @@ body {
   }
 
   .card-dark {
-    @apply p-6 rounded-2xl border border-white/[0.08];
-    background-color: #1a1f2e;
+    @apply p-6 rounded-2xl border border-white/[0.07];
+    background-color: #1c2030;
   }
 
   .card-hover {

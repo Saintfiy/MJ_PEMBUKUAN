@@ -23,9 +23,9 @@ const config: Config = {
         'surface-2': '#f8fafc',
         'surface-3': '#f1f5f9',
         border: '#e2e8f0',
-        // Keep dark colors for internal dashboard
-        dark: '#0f172a',
-        darker: '#020617',
+        // Dashboard dark theme colors (match reference UI)
+        dark: '#111318',
+        darker: '#0d1117',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

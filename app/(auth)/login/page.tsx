@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 hero-gradient">
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#f8fafc', color: '#0f172a' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
