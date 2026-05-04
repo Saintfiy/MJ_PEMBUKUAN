@@ -21,7 +21,7 @@ export default function DashboardRootLayout({ children }: { children: React.Reac
   if (!isAuthenticated) return null;
 
   return (
-    <div className="relative min-h-screen bg-dark">
+    <div className="relative min-h-screen bg-dark text-white">
       <div className="print:hidden">
         <Sidebar />
         <Navbar />
