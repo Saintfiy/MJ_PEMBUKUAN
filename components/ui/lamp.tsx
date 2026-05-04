@@ -13,12 +13,12 @@ export const LampContainer = ({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center justify-start overflow-hidden bg-slate-950 w-full z-0 pt-32",
+        "relative flex flex-col items-center justify-start overflow-hidden bg-slate-950 w-full z-0 pt-20",
         className
       )}
     >
       {/* ── LAMP LIGHT EFFECT (top portion) ── */}
-      <div className="relative flex w-full items-center justify-center isolate z-0 h-72">
+      <div className="relative flex w-full items-center justify-center isolate z-0 h-52">
         {/* Left cone */}
         <motion.div
           initial={{ opacity: 0.5, width: "15rem" }}
