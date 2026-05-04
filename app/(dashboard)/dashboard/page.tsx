@@ -293,7 +293,7 @@ export default function DashboardPage() {
                         <Pie data={categoryData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={3} dataKey="value" strokeWidth={0}>
                           {categoryData.map((entry, index) => <Cell key={index} fill={entry.fill} />)}
                         </Pie>
-                        <Tooltip contentStyle={{ backgroundColor: '#18181B', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '12px' }} formatter={(v: number) => `${v}%`} />
+                        <Tooltip contentStyle={{ backgroundColor: '#18181B', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '12px', color: '#ffffff' }} itemStyle={{ color: '#ffffff' }} formatter={(v: number) => `${v}%`} />
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="mt-4 space-y-2">

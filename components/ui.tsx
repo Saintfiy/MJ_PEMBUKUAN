@@ -49,7 +49,7 @@ export function StatCard({ label, value, icon, change, trend, compact, color = '
       <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${bgGradient} opacity-30 rounded-bl-full group-hover:opacity-60 transition-opacity duration-500`} />
       <div className="relative z-10">
         <div className="flex items-start justify-between gap-2 mb-1">
-          <p className="text-white/50 text-xs font-semibold uppercase tracking-wider truncate mt-1.5">{label}</p>
+          <p className="text-white/50 text-xs font-semibold uppercase tracking-wider mt-1.5 leading-snug">{label}</p>
           <div className={`text-2xl opacity-80 flex-shrink-0 p-2 rounded-xl bg-white/5 ${bgGradient.split(' ')[2]}`}>
             {icon}
           </div>
