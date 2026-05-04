@@ -1,7 +1,7 @@
 {
-  "name": "duittrack",
+  "name": "mj-print-web",
   "version": "1.0.0",
-  "description": "Modern fintech bookkeeping application for SMEs",
+  "description": "MJ Print Web Application",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
