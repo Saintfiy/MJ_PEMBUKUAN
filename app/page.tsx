@@ -199,19 +199,80 @@ export default function Home() {
         </div>
         
         {/* Complex Bento Grid */}
-                  {feature.title}
-                </h4>
-                <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-sm">
-                  {feature.description}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
+          {/* Card 1: Kualitas (Big) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="md:col-span-2 md:row-span-2 p-8 md:p-12 rounded-[2.5rem] bg-slate-900/50 border border-white/5 relative overflow-hidden group cursor-default shadow-2xl"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:bg-white/10 transition-colors" />
+            <div className="relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500">
+                <FiImage size={28} />
               </div>
+              <h4 className="text-3xl font-black text-white mb-4 tracking-tight">Kualitas Tanpa <br/>Kompromi</h4>
+              <p className="text-slate-400 text-lg leading-relaxed max-w-sm mb-8">Hasil cetak tajam, warna presisi, dan menggunakan bahan baku premium untuk hasil yang tahan lama.</p>
+              <div className="flex flex-wrap gap-2">
+                {['300 DPI+', 'CMYK Proof', 'Vibrant Color'].map(t => (
+                  <span key={t} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-300">{t}</span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
 
-              {/* Decorative Corner Accent */}
-              <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <FiArrowRight className="text-slate-600 -rotate-45" size={24} />
+          {/* Card 2: Proses Cepat */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="md:col-span-2 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 relative overflow-hidden group cursor-default"
+          >
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 text-white flex items-center justify-center group-hover:bg-white group-hover:text-slate-950 transition-all duration-500">
+                <FiClock size={28} />
               </div>
-            </motion.div>
-          ))}
+              <div>
+                <h4 className="text-xl font-bold text-white mb-2">Pengerjaan Ekspres</h4>
+                <p className="text-slate-400 text-sm">Selesai tepat waktu untuk kebutuhan mendesak Anda.</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Harga */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 group cursor-default"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6">
+              <FiTag size={24} />
+            </div>
+            <h4 className="text-lg font-bold text-white mb-2">Transparan</h4>
+            <p className="text-slate-400 text-xs">Harga jujur tanpa biaya tambahan tersembunyi.</p>
+          </motion.div>
+
+          {/* Card 4: Desain */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 group cursor-default overflow-hidden relative"
+          >
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-6">
+                <FiPenTool size={24} />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-2">Custom Desain</h4>
+              <p className="text-slate-400 text-xs">Layanan desain grafis profesional siap bantu.</p>
+            </div>
+            <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-rose-500/5 rounded-full blur-2xl" />
+          </motion.div>
         </div>
       </section>
 
