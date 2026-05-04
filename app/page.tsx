@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fi';
 import { PrismaHero } from '@/components/ui/prisma-hero';
 import { FeatureShowcase } from '@/components/ui/feature-showcase';
+import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 
 // Premium Preview Components for Showcase
 const QualityPreview = () => (
@@ -217,6 +218,44 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <PrismaHero />
+
+      {/* ── DASHBOARD PREVIEW SCROLL ── */}
+      <section className="bg-slate-50 relative overflow-hidden -mt-20">
+        <ContainerScroll
+          titleComponent={
+            <>
+              <h2 className="text-3xl md:text-5xl font-display font-black text-slate-900 mb-4 tracking-tight">
+                Kelola Pesanan Anda <br />
+                <span className="text-slate-500">Dalam Satu Layar</span>
+              </h2>
+            </>
+          }
+        >
+          {/* Dashboard Mockup Image or UI */}
+          <div className="w-full h-full bg-[#111318] rounded-xl overflow-hidden flex flex-col relative border border-slate-800">
+            {/* Mockup Header */}
+            <div className="h-14 border-b border-white/10 flex items-center px-6 justify-between shrink-0">
+              <div className="font-bold text-white tracking-tight">MJ Print Dashboard</div>
+              <div className="w-8 h-8 rounded-full bg-slate-800" />
+            </div>
+            {/* Mockup Content */}
+            <div className="p-6 flex-1 flex flex-col gap-6">
+              <div className="flex gap-4">
+                <div className="flex-1 h-32 bg-slate-800/50 rounded-xl border border-white/5" />
+                <div className="flex-1 h-32 bg-slate-800/50 rounded-xl border border-white/5" />
+                <div className="flex-1 h-32 bg-slate-800/50 rounded-xl border border-white/5" />
+              </div>
+              <div className="flex-1 bg-slate-800/30 rounded-xl border border-white/5" />
+            </div>
+            {/* Mockup Dock */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-64 h-16 bg-slate-800/80 rounded-full border border-white/10 backdrop-blur-md flex items-center justify-evenly">
+              <div className="w-10 h-10 rounded-full bg-slate-700" />
+              <div className="w-10 h-10 rounded-full bg-slate-700" />
+              <div className="w-10 h-10 rounded-full bg-slate-700" />
+            </div>
+          </div>
+        </ContainerScroll>
+      </section>
 
       {/* ── FEATURES SHOWCASE ── */}
       <section id="fitur" className="py-24 px-6 relative bg-white border-y border-slate-100">
