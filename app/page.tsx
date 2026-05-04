@@ -194,12 +194,12 @@ export default function Home() {
           </div>
 
           {/* Stats Row */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="grid grid-cols-3 gap-4 mb-6">
-            {[{ num: "300+", label: "DPI Resolusi" }, { num: "100%", label: "CMYK Terverifikasi" }, { num: "1 Hari", label: "Garansi Selesai" }].map((s, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 + i * 0.1 }} whileHover={{ y: -3 }} className="p-6 rounded-3xl bg-slate-900/60 border border-white/5 text-center relative overflow-hidden group">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {[{ num: "300+", label: "DPI Resolusi" }, { num: "100%", label: "Warna CMYK" }, { num: "1 Hari", label: "Garansi Selesai" }].map((s, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 + i * 0.1 }} whileHover={{ y: -3 }} className="p-4 md:p-6 rounded-3xl bg-slate-900/60 border border-white/5 text-center relative overflow-hidden group">
                 <motion.div animate={{ opacity: [0, 0.15, 0] }} transition={{ duration: 3, delay: i * 1, repeat: Infinity }} className="absolute inset-0 bg-white rounded-3xl" />
                 <div className="text-3xl md:text-4xl font-black text-white mb-1">{s.num}</div>
-                <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest">{s.label}</div>
+                <div className="text-slate-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider md:tracking-widest">{s.label}</div>
               </motion.div>
             ))}
           </motion.div>
