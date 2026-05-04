@@ -9,6 +9,7 @@ import {
 import { PrismaHero } from '@/components/ui/prisma-hero';
 import { FeatureShowcase } from '@/components/ui/feature-showcase';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
+import { LampContainer } from '@/components/ui/lamp';
 
 // Premium Preview Components for Showcase
 const QualityPreview = () => (
@@ -328,23 +329,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="py-24 px-6 bg-white border-t border-slate-100 text-center">
-        <h2 className="font-display font-black text-3xl md:text-5xl text-slate-900 mb-6 tracking-tight">
-          Siap Cetak Kebutuhan Anda?
-        </h2>
-        <p className="text-slate-500 text-lg mb-8 max-w-lg mx-auto">
+      {/* ── CTA (LAMP) ── */}
+      <LampContainer>
+        <motion.h1
+          initial={{ opacity: 0.5, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="bg-gradient-to-br from-white to-slate-400 py-4 bg-clip-text text-center text-4xl font-black tracking-tight text-transparent md:text-6xl"
+        >
+          Siap Cetak <br /> Kebutuhan Anda?
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          className="text-slate-400 text-lg md:text-xl mt-4 mb-8 max-w-lg mx-auto text-center"
+        >
           Hubungi kami sekarang untuk harga terbaik dan proses cetak yang super cepat.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-          <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
+        </motion.p>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 z-50 relative"
+        >
+          <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="bg-white text-slate-900 font-bold rounded-2xl shadow-lg shadow-white/10 hover:scale-105 transition-transform text-base px-8 py-4 inline-flex items-center gap-2">
             Kesana Sekarang <FiArrowRight />
           </a>
-          <a href="https://wa.me/6289683751701" target="_blank" rel="noopener noreferrer" className="px-8 py-4 text-slate-700 font-bold bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors inline-flex items-center gap-2">
+          <a href="https://wa.me/6289683751701" target="_blank" rel="noopener noreferrer" className="px-8 py-4 text-white font-bold border border-white/20 rounded-2xl hover:bg-white/10 transition-colors inline-flex items-center gap-2">
             WhatsApp: 089683751701
           </a>
-        </div>
-      </section>
+        </motion.div>
+      </LampContainer>
 
       {/* ── FOOTER ── */}
       <footer className="py-12 border-t border-slate-200 bg-slate-50">
