@@ -91,10 +91,7 @@ const PricePreview = () => (
 
 const DesignPreview = () => (
   <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col relative overflow-hidden">
-     <div className="flex items-center gap-3 mb-6">
-      <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-        <FiCpu size={20} />
-      </div>
+    <div className="flex items-center gap-3 mb-6">
       <div>
         <h3 className="text-sm font-bold text-slate-900">Layanan Desain</h3>
         <p className="text-xs text-slate-500">Custom sesuai keinginan</p>
