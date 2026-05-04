@@ -268,16 +268,9 @@ export default function Home() {
 
 
       {/* ── FOOTER ── */}
-      <footer className="py-12 border-t border-slate-800 bg-slate-950 relative z-20">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-display font-black text-xl text-white tracking-tight">MJ Print</span>
-          </div>
-          <div className="flex items-center gap-6 text-sm font-medium text-slate-500">
-            <Link href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
-            <Link href="#" className="hover:text-white transition-colors">Privasi</Link>
-          </div>
-          <p className="text-slate-600 text-sm">© {new Date().getFullYear()} MJ Print. All rights reserved.</p>
+      <footer className="py-8 border-t border-slate-800/50 bg-transparent relative z-20">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-center">
+          <span className="font-display font-black text-xl text-white/60 tracking-tight">MJ Print</span>
         </div>
       </footer>
 
