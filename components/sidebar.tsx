@@ -69,10 +69,10 @@ function SidebarContent({ mobile = false, onClose }: { mobile?: boolean; onClose
         </div>
       )}
 
-      {/* Menu Groups */}
-      <nav className="flex-1 overflow-y-auto py-2">
+      {/* Menu Groups - Moved to bottom */}
+      <nav className="flex-1 overflow-y-auto py-4 flex flex-col justify-end">
         {menuGroups.map((group) => (
-          <div key={group.label} className="mb-1">
+          <div key={group.label} className="mb-2 mt-auto">
             {expanded && (
               <p className="text-[10px] uppercase tracking-wider text-white/30 font-semibold px-5 py-2">
                 {group.label}
@@ -102,37 +102,6 @@ function SidebarContent({ mobile = false, onClose }: { mobile?: boolean; onClose
           </div>
         ))}
       </nav>
-
-      {/* User Info + Logout */}
-      <div className="border-t border-white/10 p-2 flex-shrink-0 space-y-1">
-        {expanded && user && (
-          <div className="flex items-center gap-2 px-3 py-2">
-            <div className="w-7 h-7 rounded-full overflow-hidden border border-white/20 bg-primary/20 flex items-center justify-center flex-shrink-0">
-              {(user as any).avatar_url ? (
-                <img src={(user as any).avatar_url} alt="avatar" className="w-full h-full object-cover" />
-              ) : user.full_name ? (
-                <span className="text-[10px] font-bold text-primary">
-                  {user.full_name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
-                </span>
-              ) : (
-                <FiUser size={13} className="text-primary" />
-              )}
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold truncate">{user.full_name || user.email}</p>
-              <p className="text-xs text-white/40 truncate">Owner</p>
-            </div>
-          </div>
-        )}
-        <motion.button
-          whileHover={{ x: 2 }}
-          onClick={logout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-white/60 hover:bg-red-500/20 hover:text-red-400 transition-smooth"
-        >
-          <FiLogOut size={18} className="flex-shrink-0" />
-          {expanded && <span className="text-sm font-medium">Keluar</span>}
-        </motion.button>
-      </div>
     </div>
   );
 }
