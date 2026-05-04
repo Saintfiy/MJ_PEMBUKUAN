@@ -228,7 +228,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
-            <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary py-2 px-5 text-xs">Kesana Sekarang</a>
+            <Link href="/login" className="btn-primary py-2 px-5 text-xs">Login Admin</Link>
           </div>
         </div>
       </motion.nav>

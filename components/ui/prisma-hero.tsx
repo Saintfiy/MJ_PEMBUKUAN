@@ -184,71 +184,14 @@ export const PrismaHero = () => {
 
           {/* ── RIGHT: Dashboard Mockup ── */}
           <div className="relative flex items-center justify-center">
-            {/* Main dashboard card */}
+            {/* Main dashboard photo */}
             <motion.div
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-md bg-white rounded-3xl shadow-elevated border border-slate-100 p-6 animate-float"
+              className="relative w-full max-w-md rounded-3xl shadow-elevated border border-slate-100 overflow-hidden animate-float"
             >
-              {/* Dashboard Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <p className="text-slate-400 text-xs font-medium">Status Pesanan 👋</p>
-                  <p className="text-slate-900 font-bold text-base mt-0.5">MJ Print Online</p>
-                </div>
-                <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-white" />
-                </div>
-              </div>
-
-              {/* Revenue Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 mb-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <p className="text-indigo-200 text-xs font-medium mb-1">Pesanan Selesai Bulan Ini</p>
-                <p className="text-white font-black text-3xl">1,245</p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold">
-                    <FiTrendingUp size={10} />
-                    +8.2%
-                  </div>
-                  <span className="text-indigo-200 text-[10px]">dari bulan lalu</span>
-                </div>
-              </div>
-
-              {/* Mini stats row */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                {[
-                  { label: "Dalam Proses", value: "34", color: "text-rose-500", bg: "bg-rose-50" },
-                  { label: "Siap Diambil", value: "12", color: "text-emerald-600", bg: "bg-emerald-50" },
-                ].map((item) => (
-                  <div key={item.label} className={`p-4 rounded-2xl ${item.bg} border border-white`}>
-                    <p className="text-slate-500 text-[10px] font-medium">{item.label}</p>
-                    <p className={`font-black text-base mt-1 ${item.color}`}>{item.value}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Mini chart placeholder */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <div className="flex justify-between items-end h-12">
-                  {[30, 55, 40, 80, 60, 90, 70].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 mx-0.5 rounded-t-sm"
-                      style={{
-                        height: `${h}%`,
-                        background: i === 5 ? "linear-gradient(to top, #6366f1, #818cf8)" : "#e2e8f0",
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="flex justify-between mt-2">
-                  {["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"].map((d) => (
-                    <span key={d} className="flex-1 text-center text-[9px] text-slate-400">{d}</span>
-                  ))}
-                </div>
-              </div>
+              <img src="/dashboard-mjprint.jpg" alt="MJ Print Dashboard" className="w-full h-auto object-cover" />
             </motion.div>
 
             {/* Floating badges */}
