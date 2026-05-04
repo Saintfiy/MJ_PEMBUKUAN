@@ -1,7 +1,7 @@
 'use client';
 
-import { Sidebar } from '@/components/sidebar';
 import { Navbar } from '@/components/navbar';
+import { Dock } from '@/components/dock';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function DashboardRootLayout({ children }: { children: React.ReactNode }) {
@@ -23,8 +23,8 @@ export default function DashboardRootLayout({ children }: { children: React.Reac
   return (
     <div className="relative min-h-screen bg-dark text-white">
       <div className="print:hidden">
-        <Sidebar />
         <Navbar />
+        <Dock />
       </div>
       {children}
     </div>

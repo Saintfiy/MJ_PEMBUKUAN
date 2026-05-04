@@ -2,14 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiMenu, FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiSettings } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
-import { useUIStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
+import Link from 'next/link';
 
 export function Navbar() {
   const router = useRouter();
-  const { sidebarOpen, toggleMobileSidebar } = useUIStore();
   const { user } = useAuth();
 
   const avatarUrl = (user as any)?.avatar_url ?? null;
@@ -34,22 +33,14 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 right-0 h-16 border-b border-white/[0.07] z-30 px-4 md:px-6 flex items-center justify-between transition-all duration-300 left-0 ${
-        sidebarOpen ? 'lg:left-[260px]' : 'lg:left-[72px]'
-      }`}
+      className="fixed top-0 left-0 right-0 h-16 border-b border-white/[0.07] z-30 px-4 md:px-6 flex items-center justify-between transition-all duration-300"
       style={{ backgroundColor: '#111318' }}
     >
-      {/* Left: Hamburger (mobile) */}
+      {/* Left: Logo */}
       <div className="flex items-center gap-3 flex-1">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={toggleMobileSidebar}
-          className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-smooth flex-shrink-0"
-          aria-label="Buka menu"
-        >
-          <FiMenu size={20} />
-        </motion.button>
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <span className="text-xl font-bold text-white tracking-tight">MJ<span className="text-white/50">Print</span></span>
+        </Link>
       </div>
 
       {/* Right Actions */}
