@@ -6,6 +6,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { FiArrowRight, FiZap, FiTag, FiPenTool, FiImage, FiCheckCircle, FiClock, FiStar, FiShield } from 'react-icons/fi';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import { LampContainer } from '@/components/ui/lamp';
+import { BackgroundPaths } from '@/components/ui/background-paths';
 
 const features = [
   {
@@ -68,6 +69,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-white selection:text-slate-950 overflow-x-hidden">
+      
+      {/* ── GLOBAL FLOATING PATHS BACKGROUND ── */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       
       {/* ── SCROLL PROGRESS ── */}
       <motion.div 
