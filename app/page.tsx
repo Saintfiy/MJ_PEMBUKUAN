@@ -84,11 +84,8 @@ export default function Home() {
       >
         <div className="pointer-events-auto flex items-center justify-between w-full max-w-5xl px-6 py-3.5 bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shadow-inner">
-              <div className="w-2.5 h-2.5 rounded-full bg-slate-950" />
-            </div>
             <span className="font-display font-black text-xl tracking-tight text-white">
-              MJ<span className="text-slate-400 font-medium"> Print</span>
+              MJ<span className="text-slate-500 font-medium"> Print</span>
             </span>
           </div>
 
@@ -198,110 +195,124 @@ export default function Home() {
           </motion.h3>
         </div>
         
-        {/* Complex Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
-          {/* Card 1: Kualitas (Big) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-auto">
+          {/* Card 1: Kualitas — Large hero card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 md:row-span-2 p-8 md:p-12 rounded-[2.5rem] bg-slate-900/50 border border-white/5 relative overflow-hidden group cursor-default shadow-2xl"
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.01 }}
+            className="md:col-span-2 md:row-span-2 min-h-[380px] p-10 rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-slate-800 border border-white/8 relative overflow-hidden group cursor-default"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:bg-white/10 transition-colors" />
-            <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center mb-8 shadow-[0_0_20px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500">
-                <FiImage size={28} />
-              </div>
-              <h4 className="text-3xl font-black text-white mb-4 tracking-tight">Kualitas Tanpa <br/>Kompromi</h4>
-              <p className="text-slate-400 text-lg leading-relaxed max-w-sm mb-8">Hasil cetak tajam, warna presisi, dan menggunakan bahan baku premium untuk hasil yang tahan lama.</p>
-              <div className="flex flex-wrap gap-2">
-                {['300 DPI+', 'CMYK Proof', 'Vibrant Color'].map(t => (
-                  <span key={t} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-300">{t}</span>
-                ))}
+            {/* Animated background glow */}
+            <motion.div 
+              animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full blur-[80px] -translate-y-1/3 translate-x-1/3"
+            />
+            <div className="relative z-10 h-full flex flex-col justify-between">
+              <motion.div 
+                whileHover={{ rotate: 10, scale: 1.15 }}
+                className="w-14 h-14 rounded-2xl bg-white text-slate-950 flex items-center justify-center mb-8 shadow-[0_0_24px_rgba(255,255,255,0.25)]"
+              >
+                <FiImage size={26} />
+              </motion.div>
+              <div>
+                <h4 className="text-3xl font-black text-white mb-3 tracking-tight">Kualitas Tanpa <br/>Kompromi</h4>
+                <p className="text-slate-400 text-base leading-relaxed max-w-sm mb-6">Hasil cetak tajam, warna presisi, dan menggunakan bahan baku premium untuk hasil yang tahan lama.</p>
+                <div className="flex flex-wrap gap-2">
+                  {['300 DPI+', 'CMYK Proof', 'Vibrant Color'].map((t, i) => (
+                    <motion.span 
+                      key={t}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + i * 0.1 }}
+                      className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-300"
+                    >{t}</motion.span>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
 
           {/* Card 2: Proses Cepat */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="md:col-span-2 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 relative overflow-hidden group cursor-default"
+            transition={{ delay: 0.15, duration: 0.6 }}
+            whileHover={{ y: -4 }}
+            className="md:col-span-2 p-8 rounded-[2.5rem] bg-slate-900/70 border border-white/5 relative overflow-hidden group cursor-default"
           >
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
-              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 text-white flex items-center justify-center group-hover:bg-white group-hover:text-slate-950 transition-all duration-500">
-                <FiClock size={28} />
-              </div>
+            {/* Animated speed lines */}
+            <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              {[1,2,3,4].map(i => (
+                <motion.div key={i}
+                  animate={{ x: ['-100%', '200%'] }}
+                  transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity, ease: 'linear' }}
+                  className={`absolute h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent`}
+                  style={{ top: `${20 + i * 18}%`, width: '60%' }}
+                />
+              ))}
+            </div>
+            <div className="relative z-10 flex items-center gap-6">
+              <motion.div 
+                whileHover={{ rotate: -10 }}
+                className="w-14 h-14 shrink-0 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center"
+              >
+                <FiClock size={26} />
+              </motion.div>
               <div>
-                <h4 className="text-xl font-bold text-white mb-2">Pengerjaan Ekspres</h4>
-                <p className="text-slate-400 text-sm">Selesai tepat waktu untuk kebutuhan mendesak Anda.</p>
+                <h4 className="text-xl font-bold text-white mb-1">Pengerjaan Ekspres</h4>
+                <p className="text-slate-400 text-sm leading-relaxed">Selesai tepat waktu, setiap waktu, untuk kebutuhan mendesak Anda.</p>
               </div>
             </div>
           </motion.div>
 
           {/* Card 3: Harga */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 group cursor-default"
+            transition={{ delay: 0.25, duration: 0.6 }}
+            whileHover={{ y: -4 }}
+            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/70 border border-white/5 group cursor-default relative overflow-hidden"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6">
-              <FiTag size={24} />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-2">Transparan</h4>
-            <p className="text-slate-400 text-xs">Harga jujur tanpa biaya tambahan tersembunyi.</p>
+            <motion.div 
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -top-6 -right-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl"
+            />
+            <motion.div whileHover={{ rotate: 15 }} className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-5">
+              <FiTag size={22} />
+            </motion.div>
+            <h4 className="text-lg font-bold text-white mb-2">Harga Transparan</h4>
+            <p className="text-slate-400 text-xs leading-relaxed">Harga jujur sejak awal, tanpa biaya tersembunyi apapun.</p>
           </motion.div>
 
           {/* Card 4: Desain */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/50 border border-white/5 group cursor-default overflow-hidden relative"
+            transition={{ delay: 0.35, duration: 0.6 }}
+            whileHover={{ y: -4 }}
+            className="md:col-span-1 p-8 rounded-[2.5rem] bg-slate-900/70 border border-white/5 group cursor-default relative overflow-hidden"
           >
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-6">
-                <FiPenTool size={24} />
-              </div>
-              <h4 className="text-lg font-bold text-white mb-2">Custom Desain</h4>
-              <p className="text-slate-400 text-xs">Layanan desain grafis profesional siap bantu.</p>
-            </div>
-            <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-rose-500/5 rounded-full blur-2xl" />
+            <motion.div 
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+              className="absolute -bottom-8 -right-8 w-28 h-28 border border-rose-500/10 rounded-full"
+            />
+            <motion.div whileHover={{ rotate: -15 }} className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-5">
+              <FiPenTool size={22} />
+            </motion.div>
+            <h4 className="text-lg font-bold text-white mb-2">Custom Desain</h4>
+            <p className="text-slate-400 text-xs leading-relaxed">Tim desain grafis kami siap mewujudkan ide kreatif Anda.</p>
           </motion.div>
         </div>
-      </section>
-
-      {/* ── MINIMALIST CTA ── */}
-      <section className="py-32 px-6 relative z-20">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto rounded-[3rem] bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 p-12 md:p-20 text-center relative overflow-hidden shadow-2xl"
-        >
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[200px] bg-slate-600/20 blur-[100px] rounded-full pointer-events-none" />
-          
-          <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-8 border border-slate-700 shadow-inner">
-            <FiCheckCircle size={28} className="text-slate-300" />
-          </div>
-          
-          <h2 className="font-display font-black text-3xl md:text-5xl text-white mb-6 tracking-tight relative z-10">
-            Tingkatkan Standar Cetak Anda
-          </h2>
-          <p className="text-slate-400 text-lg mb-10 max-w-lg mx-auto relative z-10">
-            Platform modern untuk segala kebutuhan operasional percetakan. Bebas ribet, hasil maksimal.
-          </p>
-          <Link href="/login" className="bg-white text-slate-950 font-bold rounded-full py-4 px-10 text-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)] inline-flex items-center gap-2 relative z-10">
-            Akses Dashboard <FiArrowRight />
-          </Link>
-        </motion.div>
       </section>
 
       {/* ── FOOTER ── */}
