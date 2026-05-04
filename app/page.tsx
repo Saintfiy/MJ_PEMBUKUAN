@@ -181,24 +181,6 @@ const features = [
     description: 'Belum punya desain? Tim desain grafis kami siap mewujudkan ide kreatif Anda.',
     preview: <DesignPreview />
   },
-  {
-    icon: <FiSend />,
-    color: 'text-sky-500',
-    baseColor: 'bg-sky-500',
-    accentBg: 'bg-sky-50',
-    title: 'Pemesanan Mudah',
-    description: 'Kirim file dari rumah, lakukan pembayaran online, dan pesanan langsung diproses.',
-    preview: <OrderPreview />
-  },
-  {
-    icon: <FiTruck />,
-    color: 'text-violet-500',
-    baseColor: 'bg-violet-500',
-    accentBg: 'bg-violet-50',
-    title: 'Layanan Antar',
-    description: 'Tidak sempat ambil? Kami menyediakan layanan pengantaran langsung ke lokasi Anda.',
-    preview: <DeliveryPreview />
-  },
 ];
 
 export default function Home() {
@@ -318,9 +300,14 @@ export default function Home() {
         <p className="text-slate-500 text-lg mb-8 max-w-lg mx-auto">
           Hubungi kami sekarang untuk harga terbaik dan proses cetak yang super cepat.
         </p>
-        <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
-          Kesana Sekarang <FiArrowRight />
-        </a>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+          <a href="https://maps.app.goo.gl/oDD4wcXpnfUzknNm7" target="_blank" rel="noopener noreferrer" className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
+            Kesana Sekarang <FiArrowRight />
+          </a>
+          <a href="https://wa.me/6289683751701" target="_blank" rel="noopener noreferrer" className="px-8 py-4 text-slate-700 font-bold bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors inline-flex items-center gap-2">
+            WhatsApp: 089683751701
+          </a>
+        </div>
       </section>
 
       {/* ── FOOTER ── */}
