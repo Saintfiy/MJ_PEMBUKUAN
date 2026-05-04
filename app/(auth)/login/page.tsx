@@ -97,12 +97,7 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <p className="text-center text-white/60 text-sm mt-6">
-            Belum punya akun?{' '}
-            <Link href="/register" className="text-accent hover:text-accent/80 font-semibold">
-              Daftar Gratis
-            </Link>
-          </p>
+
         </div>
       </motion.div>
     </div>

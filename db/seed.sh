@@ -1,109 +1,80 @@
 #!/bin/bash
 
-# Database Seed Script
-# This script adds sample data to the DuitTrack database for testing
+# Database Seed Script (Clean Schema)
+# Script ini akan mengisi data dummy ke Supabase untuk testing
 
-# Colors
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m' 
 
 echo -e "${BLUE}DuitTrack Database Seeding${NC}"
 echo "=============================="
 echo ""
 
-# Check if psql is available
-if ! command -v psql &> /dev/null; then
-    echo "psql not found. Installing..."
-    # Instructions for different systems
-    echo "On macOS: brew install postgresql"
-    echo "On Ubuntu: sudo apt-get install postgresql-client"
-    exit 1
-fi
-
-echo -e "${GREEN}✓ PostgreSQL client found${NC}"
-echo ""
-
-# Seed SQL for sample data
 cat > seed_data.sql << 'EOF'
--- Seed sample data for development/testing
+-- Seed sample data untuk development
 
--- Insert sample businesses
-INSERT INTO businesses (owner_id, name, industry, country, currency, business_health_score)
+-- 1. Pastikan ada user (opsional, karena user harusnya dari Supabase Auth)
+-- Tapi kita bisa buat bisnis dummy untuk user yang sudah ada
+-- NOTE: Anda harus mendaftar (sign up) setidaknya 1 user di Supabase Auth terlebih dahulu!
+
+-- 2. Insert sample businesses
+INSERT INTO businesses (owner_id, name, industry, currency)
 SELECT 
   id,
-  'Sample Business ' || random()::text,
-  'retail',
-  'ID',
-  'IDR',
-  95
-FROM users LIMIT 1;
+  'Bisnis Dummy ' || substr(md5(random()::text), 1, 4),
+  'Retail',
+  'IDR'
+FROM users 
+WHERE NOT EXISTS (
+  SELECT 1 FROM businesses WHERE owner_id = users.id
+)
+LIMIT 1;
 
--- Insert sample transactions
-INSERT INTO transactions (business_id, type, category, amount, description, date, payment_method, created_by, synced_with_payment)
+-- Update user's business_id if it's null
+UPDATE users 
+SET business_id = b.id
+FROM businesses b
+WHERE users.id = b.owner_id AND users.business_id IS NULL;
+
+-- 3. Insert sample transactions (Pemasukan)
+INSERT INTO transactions (business_id, type, category, amount, description, date, payment_method, created_by)
 SELECT
   b.id,
-  CASE WHEN random() > 0.5 THEN 'income' ELSE 'expense' END,
-  CASE WHEN random() > 0.5 THEN 'Sales' ELSE 'Operating' END,
-  (random() * 5000000)::numeric,
-  'Sample transaction ' || random()::text,
+  'income',
+  'Penjualan Produk',
+  (random() * 5000000 + 100000)::numeric,
+  'Penjualan ' || substr(md5(random()::text), 1, 6),
   NOW() - (random() * interval '30 days'),
-  'bank',
-  u.id,
-  false
+  'Transfer Bank',
+  u.id
 FROM businesses b
 CROSS JOIN users u
-LIMIT 20;
+WHERE b.owner_id = u.id
+LIMIT 10;
 
--- Insert sample customers
-INSERT INTO customers (business_id, name, email, phone, total_purchased, total_transactions)
+-- 4. Insert sample transactions (Pengeluaran)
+INSERT INTO transactions (business_id, type, category, amount, description, date, payment_method, created_by)
 SELECT
   b.id,
-  'Customer ' || generate_series,
-  'customer' || generate_series || '@example.com',
-  '+62' || substr(random()::text, 3, 9),
-  (random() * 10000000)::numeric,
-  (random() * 50)::integer
+  'expense',
+  'Operasional',
+  (random() * 2000000 + 50000)::numeric,
+  'Biaya ' || substr(md5(random()::text), 1, 6),
+  NOW() - (random() * interval '30 days'),
+  'Tunai',
+  u.id
 FROM businesses b
-CROSS JOIN generate_series(1, 5);
-
--- Insert sample inventory
-INSERT INTO inventory (business_id, name, sku, quantity, unit_price, reorder_level)
-SELECT
-  b.id,
-  'Product ' || generate_series,
-  'SKU' || LPAD((generate_series)::text, 3, '0'),
-  (random() * 100)::integer,
-  (random() * 500000)::numeric,
-  20
-FROM businesses b
-CROSS JOIN generate_series(1, 10);
-
--- Insert sample budgets
-INSERT INTO budgets (business_id, category, limit_amount, spent, period, start_date, end_date)
-SELECT
-  b.id,
-  CASE WHEN generate_series = 1 THEN 'Marketing'
-       WHEN generate_series = 2 THEN 'Operations'
-       WHEN generate_series = 3 THEN 'Staff'
-       ELSE 'Other' END,
-  (10000000 + random() * 15000000)::numeric,
-  (random() * 5000000)::numeric,
-  'monthly',
-  DATE_TRUNC('month', NOW()),
-  DATE_TRUNC('month', NOW()) + interval '1 month' - interval '1 day'
-FROM businesses b
-CROSS JOIN generate_series(1, 4);
+CROSS JOIN users u
+WHERE b.owner_id = u.id
+LIMIT 10;
 
 SELECT 'Seed data inserted successfully' as status;
 EOF
 
-echo "Sample data SQL prepared in seed_data.sql"
+echo "File seed_data.sql berhasil dibuat!"
 echo ""
-echo -e "${GREEN}Database seeding complete!${NC}"
-echo ""
-echo "To seed your database:"
-echo "1. Connect to your Supabase database"
-echo "2. Run: psql -U <user> -h <host> -d <database> < seed_data.sql"
-echo ""
-echo "Or copy & paste the SQL from seed_data.sql in Supabase SQL Editor"
+echo -e "${GREEN}Langkah selanjutnya:${NC}"
+echo "1. Buka Supabase SQL Editor"
+echo "2. Copy isi file 'seed_data.sql' dan Run"
+echo "Atau jalankan: psql -U postgres -h [DB_HOST] -d postgres < seed_data.sql"

@@ -9,8 +9,8 @@ import {
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { StatCard, Card, Button } from '@/components/ui';
 import {
-  FiTrendingUp, FiDollarSign, FiBox, FiBarChart2,
-  FiArrowRight, FiArrowUpRight, FiArrowDownRight, FiCalendar
+  FiTrendingUp, FiDollarSign, FiBarChart2,
+  FiArrowRight, FiArrowUpRight, FiArrowDownRight, FiCalendar, FiRepeat
 } from 'react-icons/fi';
 import { formatCurrency, formatCurrencyCompact } from '@/utils/helpers';
 import { useAuth } from '@/hooks/useAuth';
@@ -51,8 +51,6 @@ export default function DashboardPage() {
   const { businessId, business, loading: authLoading } = useAuth({ requireAuth: true });
   const [timeFilter, setTimeFilter] = useState(6);
   const [allTransactions, setAllTransactions] = useState<any[]>([]);
-  const [inventory, setInventory] = useState<any[]>([]);
-  const [topCustomers, setTopCustomers] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,15 +58,11 @@ export default function DashboardPage() {
     if (!businessId) return;
     setLoading(true);
     const yearStart = new Date(new Date().getFullYear(), 0, 1).toISOString();
-    const [{ data: txData }, { data: invData }, { data: custData }, { data: recentData }] = await Promise.all([
+    const [{ data: txData }, { data: recentData }] = await Promise.all([
       supabase.from('transactions').select('*').eq('business_id', businessId).gte('date', yearStart),
-      supabase.from('inventory').select('quantity, unit_price').eq('business_id', businessId),
-      supabase.from('customers').select('name, total_purchased, total_transactions').eq('business_id', businessId).order('total_purchased', { ascending: false }).limit(5),
       supabase.from('transactions').select('*').eq('business_id', businessId).order('date', { ascending: false }).limit(5),
     ]);
     setAllTransactions(txData || []);
-    setInventory(invData || []);
-    setTopCustomers(custData || []);
     setRecentTransactions(recentData || []);
     setLoading(false);
   }, [businessId]);
@@ -90,9 +84,9 @@ export default function DashboardPage() {
   const stats = useMemo(() => {
     const totalRevenue = filteredTransactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
     const totalExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-    const inventoryValue = inventory.reduce((s, i) => s + i.quantity * i.unit_price, 0);
-    return { totalRevenue, totalExpense, profit: totalRevenue - totalExpense, inventoryValue };
-  }, [filteredTransactions, inventory]);
+    const totalCount = filteredTransactions.length;
+    return { totalRevenue, totalExpense, profit: totalRevenue - totalExpense, totalCount };
+  }, [filteredTransactions]);
 
   // Chart data
   const chartData = useMemo(() => {
@@ -162,9 +156,9 @@ export default function DashboardPage() {
                 <FiBarChart2 size={14} /> Tambah Transaksi
               </Button>
             </Link>
-            <Link href="/ai-assistant">
+            <Link href="/reports">
               <Button variant="secondary" size="sm">
-                Tanya AI <FiArrowRight size={14} />
+                Lihat Laporan <FiArrowRight size={14} />
               </Button>
             </Link>
           </div>
@@ -224,10 +218,10 @@ export default function DashboardPage() {
               color={stats.profit >= 0 ? 'primary' : 'secondary'}
             />
             <StatCard
-              label="Nilai Inventori"
-              value={formatCurrency(stats.inventoryValue)}
-              compact={formatCurrencyCompact(stats.inventoryValue)}
-              icon={<FiBox />}
+              label="Total Transaksi"
+              value={`${stats.totalCount} transaksi`}
+              compact={`${stats.totalCount}x`}
+              icon={<FiRepeat />}
               color="accent"
             />
           </motion.div>
@@ -284,7 +278,7 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* ─── Bottom Grid ─── */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
               {/* Kategori Pengeluaran */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -356,46 +350,6 @@ export default function DashboardPage() {
                         <p className={`text-sm font-bold flex-shrink-0 ${tx.type === 'income' ? 'text-green-400' : 'text-red-400'}`}>
                           {tx.type === 'income' ? '+' : '-'}{formatCurrencyCompact(tx.amount)}
                         </p>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Pelanggan Teratas */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="card"
-              >
-                <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-lg font-bold">Pelanggan Teratas</h3>
-                  <Link href="/crm"><Button variant="secondary" size="sm">Lihat Semua</Button></Link>
-                </div>
-                {topCustomers.length === 0 ? (
-                  <p className="text-white/40 text-sm py-6 text-center">Belum ada data pelanggan.</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {topCustomers.map((customer, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.05 * idx }}
-                        whileHover={{ x: 4, backgroundColor: 'rgba(255,255,255,0.05)' }}
-                        className="flex items-center justify-between p-3 rounded-xl transition-colors cursor-default"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/40 to-secondary/40 flex items-center justify-center text-xs font-black text-white flex-shrink-0">
-                            {customer.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold leading-tight truncate max-w-[110px]">{customer.name}</p>
-                            <p className="text-xs text-white/35 mt-0.5">{customer.total_transactions} transaksi</p>
-                          </div>
-                        </div>
-                        <p className="text-sm font-bold text-accent flex-shrink-0">{formatCurrencyCompact(customer.total_purchased)}</p>
                       </motion.div>
                     ))}
                   </div>

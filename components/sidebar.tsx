@@ -4,11 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FiHome, FiRepeat, FiBox, FiUsers,
-  FiFileText, FiCpu, FiSettings,
+  FiHome, FiRepeat, FiFileText,
   FiChevronRight, FiChevronLeft, FiLogOut, FiX, FiUser,
-  FiTrendingUp, FiTarget, FiBarChart2, FiCamera,
-  FiAward, FiLink, FiDollarSign,
 } from 'react-icons/fi';
 import { useUIStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
@@ -24,32 +21,7 @@ const menuGroups = [
     label: 'Keuangan',
     items: [
       { label: 'Transaksi', icon: FiRepeat, href: '/transactions' },
-      { label: 'Hutang & Piutang', icon: FiDollarSign, href: '/hutang-piutang' },
-      { label: 'Budgeting', icon: FiTarget, href: '/budgeting' },
-      { label: 'Cashflow', icon: FiBarChart2, href: '/cashflow' },
-    ],
-  },
-  {
-    label: 'Operasional',
-    items: [
-      { label: 'Inventori', icon: FiBox, href: '/inventory' },
-      { label: 'Pelanggan', icon: FiUsers, href: '/crm' },
-      { label: 'Scan Struk', icon: FiCamera, href: '/scan-struk' },
-    ],
-  },
-  {
-    label: 'Analitik',
-    items: [
       { label: 'Laporan', icon: FiFileText, href: '/reports' },
-      { label: 'Asisten AI', icon: FiCpu, href: '/ai-assistant' },
-    ],
-  },
-  {
-    label: 'Lainnya',
-    items: [
-      { label: 'Integrasi', icon: FiLink, href: '/integrasi' },
-      { label: 'Prestasi', icon: FiAward, href: '/achievements' },
-      { label: 'Pengaturan', icon: FiSettings, href: '/settings' },
     ],
   },
 ];
