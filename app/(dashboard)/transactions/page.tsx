@@ -286,7 +286,7 @@ export default function TransactionsPage() {
             <div className="md:hidden space-y-3">
               {filtered.map((tx, idx) => (
                 <motion.div key={tx.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }} className="card">
+                  transition={{ delay: idx * 0.05 }} className="card-dark">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">

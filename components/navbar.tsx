@@ -20,9 +20,10 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 right-0 h-16 glass border-b border-white/10 z-30 px-4 md:px-6 flex items-center justify-between transition-all duration-300 left-0 ${
+      className={`fixed top-0 right-0 h-16 border-b border-white/[0.07] z-30 px-4 md:px-6 flex items-center justify-between transition-all duration-300 left-0 ${
         sidebarOpen ? 'lg:left-[260px]' : 'lg:left-[72px]'
       }`}
+      style={{ backgroundColor: '#111318' }}
     >
       {/* Left: Hamburger (mobile) */}
       <div className="flex items-center gap-3 flex-1">

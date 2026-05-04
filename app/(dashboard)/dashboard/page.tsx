@@ -243,7 +243,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="card"
+              className="card-dark"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -284,7 +284,7 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="card"
+                className="card-dark"
               >
                 <h3 className="text-lg font-bold mb-5">Kategori Pengeluaran</h3>
                 {categoryData.length > 0 ? (
@@ -319,7 +319,7 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="card"
+                className="card-dark"
               >
                 <div className="flex items-center justify-between mb-5">
                   <h3 className="text-lg font-bold">Transaksi Terbaru</h3>
