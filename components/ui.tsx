@@ -13,9 +13,9 @@ interface CardProps {
 export function Card({ children, className = '', hover = true, style }: CardProps) {
   return (
     <motion.div
-      whileHover={hover ? { y: -3, scale: 1.01, boxShadow: '0 20px 40px -10px rgba(139, 92, 246, 0.2)' } : undefined}
+      whileHover={hover ? { y: -2, boxShadow: '0 20px 40px -10px rgba(139, 92, 246, 0.2)' } : undefined}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className={`card relative overflow-hidden backdrop-blur-xl border border-white/10 ${className}`}
+      className={`card-dark relative overflow-hidden ${className}`}
       style={style}
     >
       {children}
