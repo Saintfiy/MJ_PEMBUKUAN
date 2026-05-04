@@ -145,7 +145,7 @@ export default function DashboardPage() {
           className="flex flex-wrap items-center justify-between gap-4"
         >
           <div>
-            <p className="text-white/40 text-sm font-medium uppercase tracking-widest mb-1">Selamat datang kembali 👋</p>
+            <p className="text-white/40 text-sm font-medium uppercase tracking-widest mb-1">Halo Admin</p>
             <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
               {business?.name || 'Bisnis Anda'}
             </h1>
@@ -175,11 +175,10 @@ export default function DashboardPage() {
               key={f.value}
               layout
               onClick={() => setTimeFilter(f.value)}
-              className={`px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                timeFilter === f.value
+              className={`px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200 ${timeFilter === f.value
                   ? 'bg-primary text-darker shadow-lg shadow-primary/30'
                   : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
-              }`}
+                }`}
             >
               {f.label}
             </motion.button>
