@@ -118,7 +118,7 @@ export const PrismaHero = () => {
               className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-semibold"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-              Layanan Cetak Digital #1 Indonesia
+              Layanan Cetak Digital
             </motion.div>
 
             {/* Headline */}
