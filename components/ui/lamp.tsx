@@ -13,7 +13,7 @@ export const LampContainer = ({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center justify-start overflow-hidden bg-slate-950 w-full z-0 pt-20",
+        "relative flex flex-col items-center justify-start overflow-hidden bg-transparent w-full z-0 pt-20",
         className
       )}
     >
@@ -66,7 +66,7 @@ export const LampContainer = ({
       </div>
 
       {/* ── CHILDREN — hero text below the lamp ── */}
-      <div className="relative z-50 flex flex-col items-center px-5 w-full pb-20">
+      <div className="relative z-50 flex flex-col items-center px-5 w-full pb-24 pt-8">
         {children}
       </div>
     </div>
